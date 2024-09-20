@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: ecommerce-homework
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/javaakademi?serverTimezone=UTC
+    username: root
+    password: spring
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+
+server:
+  port: 8080
