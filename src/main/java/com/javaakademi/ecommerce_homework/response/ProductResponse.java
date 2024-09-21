@@ -1,35 +1,21 @@
-package com.javaakademi.ecommerce_homework.entity;
+package com.javaakademi.ecommerce_homework.response;
 
-import jakarta.persistence.*;
+import com.javaakademi.ecommerce_homework.entity.ProductCategory;
 
 import java.util.List;
 
-@Entity
-public class Product {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+public class ProductResponse {
     private String name;
     private double price;
     private int amount;
-    @ManyToMany
-    private List<ProductCategory> categories;
-    public Product(){}
+    private List<String> categories;
+    public ProductResponse(){}
 
-    public Product(int id, String name, double price, int amount, List<ProductCategory> categories) {
-        this.id = id;
+    public ProductResponse(String name, double price, int amount, List<String> categories) {
         this.name = name;
         this.price = price;
         this.amount = amount;
         this.categories = categories;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getName() {
@@ -56,11 +42,11 @@ public class Product {
         this.amount = amount;
     }
 
-    public List<ProductCategory> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<ProductCategory> categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 }

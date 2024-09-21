@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductCategoryRepository extends JpaRepository<ProductCategory,Integer> {
+    ProductCategory findByName(String categoryName);
 }

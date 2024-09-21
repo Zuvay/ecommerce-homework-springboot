@@ -19,13 +19,13 @@ public class UserService {
     @Autowired
     private BasketRepository basketRepository;
 
-    public UserRequest createUser(UserRequest userRequest) {
+    public UserResponse createUser(UserRequest userRequest) {
         User entity = toEntity(userRequest);
 
         createAndAssignBasket(entity);
 
         userRepository.save(entity);
-        return userRequest;
+        return toResponse(userRequest);
     }
     public void createAndAssignBasket(User user){
         Basket basket = new Basket();

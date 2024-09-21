@@ -10,14 +10,13 @@ public class ProductCategory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
-    @OneToMany(mappedBy = "category")
-    private List<Product> products;
+
     public ProductCategory(){}
 
-    public ProductCategory(int id, String name, List<Product> products) {
+    public ProductCategory(int id, String name) {
         this.id = id;
         this.name = name;
-        this.products = products;
+
     }
 
     public int getId() {
@@ -36,11 +35,4 @@ public class ProductCategory {
         this.name = name;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
 }
