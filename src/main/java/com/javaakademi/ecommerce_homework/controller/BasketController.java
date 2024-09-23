@@ -1,8 +1,6 @@
 package com.javaakademi.ecommerce_homework.controller;
 
-import com.javaakademi.ecommerce_homework.entity.Basket;
 import com.javaakademi.ecommerce_homework.request.BasketRequest;
-import com.javaakademi.ecommerce_homework.request.ProductRequest;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import com.javaakademi.ecommerce_homework.service.BasketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,5 +21,13 @@ public class BasketController {
     @GetMapping
     public List<BasketResponse> getAllItems(){
         return basketService.getAllProductsInBasket();
+    }
+    @DeleteMapping("/{basketId}/{productId}")
+    public void removeProductFromBasket(@PathVariable int basketId,@PathVariable int productId){
+        basketService.deleteProductByIdFromBasket(basketId,productId);
+    }
+    @PutMapping("/{id}")
+    public BasketResponse doPaymentAndEmptyBasket(@PathVariable int id){
+        return basketService.doPaymentAndEmptyBasket(id);
     }
 }

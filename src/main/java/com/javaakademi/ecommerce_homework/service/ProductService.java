@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class ProductService {
     @Autowired
-    private ProductRepository repository;
+    private ProductRepository productRepository;
     @Autowired
     private ProductCategoryRepository categoryRepository;
 
@@ -33,16 +33,40 @@ public class ProductService {
         }
         product.setCategories(categories);
 
-        repository.save(product);
+        productRepository.save(product);
         return toResponse(product);
     }
     public List<ProductResponse> getAllProducts() {
-        List<Product> products= repository.findAll();
+        List<Product> products= productRepository.findAll();
         List<ProductResponse> productResponses=new ArrayList<>();
         for(Product product:products){
             productResponses.add(toResponse(product));
         }
         return productResponses;
+    }
+    public void deleteProduct(int id){
+        productRepository.deleteById(id);
+    }
+    public ProductResponse updateProduct(ProductRequest request, int id) {
+        Product updateProduct = productRepository.findById(id).orElseThrow(() -> new RuntimeException("Product not found"));
+
+        updateProduct.setName(request.getName());
+        updateProduct.setPrice(request.getPrice());
+        updateProduct.setAmount(request.getAmount());
+
+        List<ProductCategory> updatedCategories = new ArrayList<>();
+        for (String categoryName : request.getCategoryNames()) {
+            ProductCategory category = categoryRepository.findByName(categoryName);
+            if (category != null) {
+                updatedCategories.add(category);
+            }
+        }
+
+        updateProduct.setCategories(updatedCategories);
+
+        productRepository.save(updateProduct);
+
+        return toResponse(updateProduct);
     }
 
     public Product toEntity(ProductRequest request){

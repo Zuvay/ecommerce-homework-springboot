@@ -4,10 +4,9 @@ import com.javaakademi.ecommerce_homework.request.ProductCategoryRequest;
 import com.javaakademi.ecommerce_homework.response.ProductCategoryResponse;
 import com.javaakademi.ecommerce_homework.service.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/categories")
@@ -16,7 +15,19 @@ public class ProductCategoryController {
     private ProductCategoryService productCategoryService;
 
     @PostMapping
-    private ProductCategoryResponse createCategory(@RequestBody ProductCategoryRequest request){
+    public ProductCategoryResponse createCategory(@RequestBody ProductCategoryRequest request){
         return productCategoryService.createProductCategory(request);
+    }
+    @DeleteMapping("/{id}")
+    public void deleteProductCategory(@PathVariable int id){
+        productCategoryService.deleteProductCategory(id);
+    }
+    @GetMapping
+    public List<ProductCategoryResponse> getAllProductCategories(){
+        return productCategoryService.getAllProductCategories();
+    }
+    @PutMapping("/{id}")
+    public ProductCategoryResponse updateProductCategory(@RequestBody ProductCategoryRequest request,@PathVariable int id){
+        return productCategoryService.updateProductCategory(request,id);
     }
 }

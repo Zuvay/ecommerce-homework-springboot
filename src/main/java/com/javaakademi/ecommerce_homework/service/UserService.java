@@ -9,6 +9,8 @@ import com.javaakademi.ecommerce_homework.response.UserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -22,18 +24,45 @@ public class UserService {
     public UserResponse createUser(UserRequest userRequest) {
         User entity = toEntity(userRequest);
 
-        createAndAssignBasket(entity);
+        if (entity.getUserBasket() == null) {
+            createAndAssignBasket(entity);
+        }
 
         userRepository.save(entity);
-        return toResponse(userRequest);
+        return toResponse(entity);
     }
-    public void createAndAssignBasket(User user){
+
+    public void deleteUser(int userID) {
+        userRepository.deleteById(userID);
+    }
+
+    public UserResponse updateUser(UserRequest request,int id){
+        User updateUser =userRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+        updateUser.setUsername(request.getUsername());
+        updateUser.setUserpassword(request.getUserpassword());
+        updateUser.setUseremail(request.getUseremail());
+        updateUser.setUserpassword(request.getUserpassword());
+        userRepository.save(updateUser);
+        return toResponse(updateUser);
+    }
+
+    public List<UserResponse> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserResponse> userResponses = new ArrayList<>();
+
+        for (User user : users) {
+            userResponses.add(toResponse(user));
+        }
+        return userResponses;
+    }
+
+    public void createAndAssignBasket(User user) {
         Basket basket = new Basket();
         basketRepository.save(basket);
         user.setUserBasket(basket);
     }
 
-    public User toEntity(UserRequest request){
+    public User toEntity(UserRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
         user.setUsersurname(request.getUsersurname());
@@ -42,11 +71,11 @@ public class UserService {
         return user;
     }
 
-    public UserResponse toResponse(UserRequest userRequest){
+    public UserResponse toResponse(User user) {
         UserResponse userResponse = new UserResponse();
-        userResponse.setUsername(userRequest.getUsername());
-        userResponse.setUsersurname(userRequest.getUsersurname());
-        userResponse.setUseremail(userRequest.getUseremail());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setUsersurname(user.getUsersurname());
+        userResponse.setUseremail(user.getUseremail());
         return userResponse;
     }
 }
