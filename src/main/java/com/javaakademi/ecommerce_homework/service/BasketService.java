@@ -2,10 +2,11 @@ package com.javaakademi.ecommerce_homework.service;
 
 import com.javaakademi.ecommerce_homework.entity.Basket;
 import com.javaakademi.ecommerce_homework.entity.Product;
+import com.javaakademi.ecommerce_homework.entity.User;
 import com.javaakademi.ecommerce_homework.repository.BasketRepository;
 import com.javaakademi.ecommerce_homework.repository.ProductRepository;
+import com.javaakademi.ecommerce_homework.repository.UserRepository;
 import com.javaakademi.ecommerce_homework.request.BasketRequest;
-import com.javaakademi.ecommerce_homework.request.ProductRequest;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,9 @@ public class BasketService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public BasketResponse addProductInBasket(BasketRequest request, int userid) {
         Basket basket = basketRepository.findById(userid).orElseThrow(() -> new RuntimeException("Basket not found"));
@@ -78,16 +82,29 @@ public class BasketService {
 
         basketRepository.save(basket);
     }
-    public BasketResponse doPaymentAndEmptyBasket(int id){
-        Basket basket = basketRepository.findById(id).orElseThrow(()->new RuntimeException("Basket not found"));
-        doPayment(); //Farazi olarak ödeme gerçekleşecek ve ilgili sepet boşaltılacak
-        basket.setProducts(new ArrayList<>());
-        basketRepository.save(basket);
+    public BasketResponse doPaymentAndEmptyBasket(int basketID, int userID){
+        Basket basket = basketRepository.findById(basketID).orElseThrow(()->new RuntimeException("Basket not found"));
+        User user =  userRepository.findById(userID).orElseThrow(()->new RuntimeException("User not found"));
+        double basketTotal=0;
+        for(Product product:basket.getProducts()){
+            double oneItemTotal =product.getAmount()*product.getPrice();
+            basketTotal += oneItemTotal;
+        }
+        if(doPayment(user,basketTotal)){
+            user.setUsermoney(user.getUsermoney()-basketTotal);
+            basket.setProducts(new ArrayList<>());
+            basketRepository.save(basket);
+        }else{
+            throw new RuntimeException("Bakiye yetersiz");
+        }
         return toResponse(basket);
     }
 
-    private void doPayment() {
-
+    private boolean doPayment(User user, double basketTotal) {
+        if(user.getUsermoney()<basketTotal){
+            return true;
+        }
+        return false;
     }
 
     public BasketResponse toResponse(Basket basket){

@@ -45,6 +45,8 @@ public class ProductService {
         return productResponses;
     }
     public void deleteProduct(int id){
+        Product product = productRepository.findById(id).orElseThrow(()->new RuntimeException("Product not found"));
+        product.setCategories(new ArrayList<>());
         productRepository.deleteById(id);
     }
     public ProductResponse updateProduct(ProductRequest request, int id) {

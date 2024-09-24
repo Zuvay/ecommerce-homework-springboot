@@ -4,12 +4,33 @@ public class UserResponse {
     private String username;
     private String usersurname;
     private String useremail;
+    private String useradress;
+    private double usermoney;
 
-    public UserResponse(String username, String usersurname, String useremail) {
+    public UserResponse(String username, String usersurname, String useremail, String useradress, double usermoney) {
         this.username = username;
         this.usersurname = usersurname;
         this.useremail = useremail;
+        this.useradress = useradress;
+        this.usermoney = usermoney;
     }
+
+    public String getUseradress() {
+        return useradress;
+    }
+
+    public void setUseradress(String useradress) {
+        this.useradress = useradress;
+    }
+
+    public double getUsermoney() {
+        return usermoney;
+    }
+
+    public void setUsermoney(double usermoney) {
+        this.usermoney = usermoney;
+    }
+
     public UserResponse(){}
 
     public String getUsername() {

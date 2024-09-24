@@ -42,6 +42,8 @@ public class UserService {
         updateUser.setUserpassword(request.getUserpassword());
         updateUser.setUseremail(request.getUseremail());
         updateUser.setUserpassword(request.getUserpassword());
+        updateUser.setUsermoney(request.getUsermoney());
+        updateUser.setUseradress(request.getUseradress());
         userRepository.save(updateUser);
         return toResponse(updateUser);
     }
@@ -68,6 +70,8 @@ public class UserService {
         user.setUsersurname(request.getUsersurname());
         user.setUseremail(request.getUseremail());
         user.setUserpassword(request.getUserpassword());
+        user.setUseradress(request.getUseradress());
+        user.setUsermoney(request.getUsermoney());
         return user;
     }
 
@@ -76,6 +80,8 @@ public class UserService {
         userResponse.setUsername(user.getUsername());
         userResponse.setUsersurname(user.getUsersurname());
         userResponse.setUseremail(user.getUseremail());
+        userResponse.setUseradress(user.getUseradress());
+        userResponse.setUsermoney(user.getUsermoney());
         return userResponse;
     }
 }
