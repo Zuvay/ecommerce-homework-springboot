@@ -12,7 +12,7 @@ public class Product {
     private String name;
     private double price;
     private int amount;
-    @ManyToMany(cascade = CascadeType.REMOVE)//Bununla birlikte eğer bir categori silmek istersem onunla birlikte tüm itemler silinmiş olacak
+    @OneToMany
     private List<ProductCategory> categories;
     public Product(){}
 
