@@ -11,8 +11,8 @@ public class Basket {
     private int id;
     @ManyToOne
     private User user_id;
-    @OneToOne
-    private BasketProduct basketProduct;
+    @OneToMany
+    private List<BasketProduct> basketProducts; //bir sepette birden çok sepet ürünü olabilir.
     
     //getter setter ve const eklenecek
 }
