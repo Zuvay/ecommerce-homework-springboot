@@ -15,8 +15,11 @@ public class User {
     private String userpassword;
     private String useradress;
     private double usermoney;
-    @OneToOne
+    @OneToMany
     private Basket userBasket;
+    @OneToOne
+    private Shop userShop;
+    // ilgili getter setterlar eklenecek
 
     public User(int id, String username, String usersurname, String useremail, String userpassword, String useradress, double usermoney, Basket userBasket) {
         this.id = id;
