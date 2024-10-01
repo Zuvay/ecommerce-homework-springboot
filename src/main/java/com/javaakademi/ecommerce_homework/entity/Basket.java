@@ -12,7 +12,7 @@ public class Basket {
     @ManyToOne
     private User user_id;
     @OneToOne
-    private List<BasketProduct> basketProducts;
+    private BasketProduct basketProduct;
     
     //getter setter ve const eklenecek
 }
