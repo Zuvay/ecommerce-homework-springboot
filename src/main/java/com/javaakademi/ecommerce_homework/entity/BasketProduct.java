@@ -12,9 +12,9 @@ public class BasketProduct {
     private int basketProductAmount;
     private double basketProductPrice;
     @ManyToOne
-    private List<Product> products;
+    private Product product; //Birden çok ürün bir BasketProductta olabilir.
     @ManyToOne
-    private List<Basket> baskets;
+    private Basket basket; //Bir sepette birden çok basketproduct
 
     public BasketProduct(){}
     //const ve getter setterlar eklenecek
