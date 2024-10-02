@@ -12,7 +12,7 @@ public class BasketProduct {
     private int basketProductAmount;
     private double basketProductPrice;
     @ManyToOne
-    private Product product; //Birden çok ürün bir BasketProductta olabilir.
+    private Product product; //ürünler birden çok basketproduct'ta bulunabilir
     @ManyToOne
     private Basket basket; //Bir sepette birden çok basketproduct
 
