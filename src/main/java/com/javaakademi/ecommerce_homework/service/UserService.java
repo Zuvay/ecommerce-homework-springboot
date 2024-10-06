@@ -24,9 +24,9 @@ public class UserService {
     public UserResponse createUser(UserRequest userRequest) {
         User entity = toEntity(userRequest);
 
-        if (entity.getUserBasket() == null) {
-            createAndAssignBasket(entity);
-        }
+//        if (entity.getUserBasket() == null) {
+//            createAndAssignBasket(entity);
+//        }
 
         userRepository.save(entity);
         return toResponse(entity);
@@ -61,7 +61,7 @@ public class UserService {
     public void createAndAssignBasket(User user) {
         Basket basket = new Basket();
         basketRepository.save(basket);
-        user.setUserBasket(basket);
+//        user.setUserBasket(basket);
     }
 
     public User toEntity(UserRequest request) {
