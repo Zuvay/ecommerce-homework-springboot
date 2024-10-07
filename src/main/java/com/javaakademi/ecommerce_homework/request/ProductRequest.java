@@ -5,7 +5,6 @@ import java.util.List;
 public class ProductRequest {
     private String name;
     private double price;
-    private int amount;
     private List<String> categoryNames;
 
     public ProductRequest(){}
@@ -13,7 +12,6 @@ public class ProductRequest {
     public ProductRequest(String name, double price, int amount, List<String> categoryNames) {
         this.name = name;
         this.price = price;
-        this.amount = amount;
         this.categoryNames = categoryNames;
     }
 
@@ -31,14 +29,6 @@ public class ProductRequest {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 
     public List<String> getCategoryNames() {

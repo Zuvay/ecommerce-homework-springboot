@@ -11,16 +11,14 @@ public class Product {
     private int id;
     private String name;
     private double price;
-    private int amount;
     @OneToMany
     private List<ProductCategory> categories;
     public Product(){}
 
-    public Product(int id, String name, double price, int amount, List<ProductCategory> categories) {
+    public Product(int id, String name, double price, List<ProductCategory> categories) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.amount = amount;
         this.categories = categories;
     }
 
@@ -46,14 +44,6 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
     }
 
     public List<ProductCategory> getCategories() {

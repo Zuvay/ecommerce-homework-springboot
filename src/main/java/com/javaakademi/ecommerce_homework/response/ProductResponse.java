@@ -7,14 +7,12 @@ import java.util.List;
 public class ProductResponse {
     private String name;
     private double price;
-    private int amount;
     private List<String> categories;
     public ProductResponse(){}
 
     public ProductResponse(String name, double price, int amount, List<String> categories) {
         this.name = name;
         this.price = price;
-        this.amount = amount;
         this.categories = categories;
     }
 
@@ -34,13 +32,6 @@ public class ProductResponse {
         this.price = price;
     }
 
-    public int getAmount() {
-        return amount;
-    }
-
-    public void setAmount(int amount) {
-        this.amount = amount;
-    }
 
     public List<String> getCategories() {
         return categories;

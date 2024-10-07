@@ -18,7 +18,7 @@ public class User {
     private double usermoney;
     @OneToMany
     private List<Basket> userBaskets;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.PERSIST) //Bu sayede, Shop nesnesini save etmenize gerek kalmaz, çünkü User kaydedildiğinde Shop da otomatik kaydedilir.
     private Shop userShop;
     public User(){}
 

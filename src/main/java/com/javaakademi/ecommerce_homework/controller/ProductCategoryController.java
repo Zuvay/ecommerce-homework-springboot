@@ -14,10 +14,7 @@ public class ProductCategoryController {
     @Autowired
     private ProductCategoryService productCategoryService;
 
-    @PostMapping
-    public ProductCategoryResponse createCategory(@RequestBody ProductCategoryRequest request){
-        return productCategoryService.createProductCategory(request);
-    }
+
     @DeleteMapping("/{id}")
     public void deleteProductCategory(@PathVariable int id){
         productCategoryService.deleteProductCategory(id);

@@ -1,8 +1,10 @@
 package com.javaakademi.ecommerce_homework.service;
 
 import com.javaakademi.ecommerce_homework.entity.Basket;
+import com.javaakademi.ecommerce_homework.entity.Shop;
 import com.javaakademi.ecommerce_homework.entity.User;
 import com.javaakademi.ecommerce_homework.repository.BasketRepository;
+import com.javaakademi.ecommerce_homework.repository.ShopRepository;
 import com.javaakademi.ecommerce_homework.repository.UserRepository;
 import com.javaakademi.ecommerce_homework.request.UserRequest;
 import com.javaakademi.ecommerce_homework.response.UserResponse;
@@ -21,15 +23,25 @@ public class UserService {
     @Autowired
     private BasketRepository basketRepository;
 
+    @Autowired
+    private ShopRepository shopRepository;
+
     public UserResponse createUser(UserRequest userRequest) {
         User entity = toEntity(userRequest);
-
-//        if (entity.getUserBasket() == null) {
-//            createAndAssignBasket(entity);
-//        }
-
         userRepository.save(entity);
+        if(entity.getUserShop() == null){
+            createAndAssignShopIfIsNull(userRequest,entity);
+        }
         return toResponse(entity);
+    }
+
+    private void createAndAssignShopIfIsNull(UserRequest userRequest, User user) {
+        Shop entityShop = new Shop();
+        entityShop.setShopName(userRequest.getShopName());
+        entityShop.setShopUser(user);
+        user.setUserShop(entityShop);
+
+        shopRepository.save(entityShop);
     }
 
     public void deleteUser(int userID) {
@@ -58,12 +70,6 @@ public class UserService {
         return userResponses;
     }
 
-    public void createAndAssignBasket(User user) {
-        Basket basket = new Basket();
-        basketRepository.save(basket);
-//        user.setUserBasket(basket);
-    }
-
     public User toEntity(UserRequest request) {
         User user = new User();
         user.setUsername(request.getUsername());
@@ -82,6 +88,7 @@ public class UserService {
         userResponse.setUseremail(user.getUseremail());
         userResponse.setUseradress(user.getUseradress());
         userResponse.setUsermoney(user.getUsermoney());
+        userResponse.setShopName(user.getUserShop().getShopName());
         return userResponse;
     }
 }

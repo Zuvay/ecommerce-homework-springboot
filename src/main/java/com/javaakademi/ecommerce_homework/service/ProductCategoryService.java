@@ -15,9 +15,9 @@ public class ProductCategoryService {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
 
-    public ProductCategoryResponse createProductCategory(ProductCategoryRequest request){
-        productCategoryRepository.save(toEntity(request));
-        return toResponse(toEntity(request));
+    public ProductCategory createProductCategory(ProductCategoryRequest request) {
+        ProductCategory category = toEntity(request);
+        return productCategoryRepository.save(category);
     }
     public void deleteProductCategory(int id){
         productCategoryRepository.deleteById(id);

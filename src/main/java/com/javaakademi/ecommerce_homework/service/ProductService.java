@@ -54,7 +54,6 @@ public class ProductService {
 
         updateProduct.setName(request.getName());
         updateProduct.setPrice(request.getPrice());
-        updateProduct.setAmount(request.getAmount());
 
         List<ProductCategory> updatedCategories = new ArrayList<>();
         for (String categoryName : request.getCategoryNames()) {
@@ -75,7 +74,6 @@ public class ProductService {
         Product product = new Product();
         product.setName(request.getName());
         product.setCategories(new ArrayList<>());
-        product.setAmount(request.getAmount());
         product.setPrice(request.getPrice());
         return product;
     }
@@ -83,7 +81,6 @@ public class ProductService {
     public ProductResponse toResponse(Product product){
         ProductResponse response = new ProductResponse();
         response.setName(product.getName());
-        response.setAmount(product.getAmount());
         response.setPrice(product.getPrice());
 
         List<String> productCategories = new ArrayList<>();

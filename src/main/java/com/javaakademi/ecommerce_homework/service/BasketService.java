@@ -1,13 +1,14 @@
 package com.javaakademi.ecommerce_homework.service;
 
 import com.javaakademi.ecommerce_homework.entity.Basket;
+import com.javaakademi.ecommerce_homework.entity.BasketProduct;
 import com.javaakademi.ecommerce_homework.entity.Product;
 import com.javaakademi.ecommerce_homework.entity.User;
 import com.javaakademi.ecommerce_homework.repository.BasketRepository;
 import com.javaakademi.ecommerce_homework.repository.ProductRepository;
 import com.javaakademi.ecommerce_homework.repository.UserRepository;
-import com.javaakademi.ecommerce_homework.request.BasketRequest;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
+import com.javaakademi.ecommerce_homework.response.ProductAmount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,97 +26,62 @@ public class BasketService {
     @Autowired
     private UserRepository userRepository;
 
-    public BasketResponse addProductInBasket(BasketRequest request, int userid) {
-        Basket basket = basketRepository.findById(userid).orElseThrow(() -> new RuntimeException("Basket not found"));
-
-        Product product = productRepository.findByName(request.getProductName());
-        if (product == null) {
-            throw new RuntimeException("Product not found");
-        }
-
-        List<Product> products = basket.getProducts();
-
-        // Sepette varsa miktarı arttır
-        if (isProductAlreadyInBasket(products, product.getId())) {
-            for (Product p : products) {
-                if (p.getId() == product.getId()) {
-                    p.setAmount(p.getAmount() + request.getAmount());
-                    break;
-                }
-            }
-        } else {
-            // yoksa yeni ürün olarak ekle
-            product.setAmount(request.getAmount());
-            products.add(product);
-        }
-
-        basket.setProducts(products);
+    public BasketResponse createBasketForUser(int userID) {
+        User user = userRepository.findById(userID).orElseThrow();
+        Basket basket = createAndAssingBasket(user);
         basketRepository.save(basket);
         return toResponse(basket);
     }
 
+    private BasketResponse toResponse(Basket basket) {
+        BasketResponse basketResponse = new BasketResponse();
+        basketResponse.setUser(basket.getUser().getUsername());
+        basketResponse.setStatus(basket.getStatus());
 
-    public boolean isProductAlreadyInBasket(List<Product> products,int productId){
-        for(Product i:products){
-            if(i.getId()==productId){
-                return true;
-            }
+        List<BasketProduct> basketProducts = basket.getBasketProducts();
+        List<ProductAmount> responseProducts = new ArrayList<>();
+
+        for (BasketProduct product : basketProducts) {
+            String productName = product.getProduct().getName();
+            int productAmount = product.getBasketProductAmount();
+
+
+            ProductAmount productAmountObj = new ProductAmount(productName, productAmount);
+
+            responseProducts.add(productAmountObj);
         }
-        return false;
-    }
-    public List<BasketResponse> getAllProductsInBasket(){
-        List<Basket> basketitems = basketRepository.findAll();
-        List<BasketResponse> basketResponses = new ArrayList<>();
 
-        for(Basket basket:basketitems){
+        basketResponse.setProducts(responseProducts);
+
+        return basketResponse;
+    }
+
+
+    private Basket createAndAssingBasket(User user) {
+        Basket newBasket = new Basket();
+        newBasket.setStatus("Alışverişe devam ediyor");
+        newBasket.setUser(user);
+        newBasket.setBasketProducts(new ArrayList<>());
+        return newBasket;
+    }
+
+    public List<BasketResponse> findAll() {
+        List<Basket> baskets= basketRepository.findAll();
+        List<BasketResponse> basketResponses= new ArrayList<>();
+        for(Basket basket:baskets){
             basketResponses.add(toResponse(basket));
         }
         return basketResponses;
     }
-    public void deleteProductByIdFromBasket(int basketId, int productId) {
-        Basket basket = basketRepository.findById(basketId)
-                .orElseThrow(() -> new RuntimeException("Basket not found"));
 
-        List<Product> productsInBasket = basket.getProducts();
-
-        productsInBasket.removeIf(product -> product.getId() == productId);
-
-        basketRepository.save(basket);
-    }
-    public BasketResponse doPaymentAndEmptyBasket(int basketID, int userID){
-        Basket basket = basketRepository.findById(basketID).orElseThrow(()->new RuntimeException("Basket not found"));
-        User user =  userRepository.findById(userID).orElseThrow(()->new RuntimeException("User not found"));
-        double basketTotal=0;
-        for(Product product:basket.getProducts()){
-            double oneItemTotal =product.getAmount()*product.getPrice();
-            basketTotal += oneItemTotal;
+    public Basket addAmountOfProductOneByOne(int productID, int basketID) {
+        Basket basket = basketRepository.findById(basketID).orElseThrow();
+        List<BasketProduct> products= basket.getBasketProducts();
+        for(BasketProduct product:products){
+            if(product.getId()==productID){
+                product.setBasketProductAmount(product.getBasketProductAmount()+1);
+            }
         }
-        if(doPayment(user,basketTotal)){
-            user.setUsermoney(user.getUsermoney()-basketTotal);
-            basket.setProducts(new ArrayList<>());
-            basketRepository.save(basket);
-        }else{
-            throw new RuntimeException("Bakiye yetersiz");
-        }
-        return toResponse(basket);
+        return basketRepository.save(basket);
     }
-
-    private boolean doPayment(User user, double basketTotal) {
-        if(user.getUsermoney()<basketTotal){
-            return true;
-        }
-        return false;
-    }
-
-    public BasketResponse toResponse(Basket basket){
-        BasketResponse response=new BasketResponse();
-        List<Product> products = basket.getProducts();
-        List<String> productNames = new ArrayList<>();
-        for(Product product:products){
-            productNames.add(product.getName()+" isimli ürün, "+product.getPrice()+" fiyatında ve "+product.getAmount()+" adedindedir.");
-        }
-        response.setProducts(productNames);
-        return response;
-    }
-
 }

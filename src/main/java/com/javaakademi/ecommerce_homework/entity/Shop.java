@@ -13,16 +13,45 @@ public class Shop {
     @OneToOne
     private User shopUser;
     @OneToMany
-    private List<ProductCategory> categories;
-    public Product(){}
+    private List<ProductCategory> shopCategories;
+    public Shop(){}
 
-    public Product(int id, String shopName,User shopUser, List<ProductCategory> categories) {
+    public Shop(int id, String shopName,User shopUser, List<ProductCategory> shopCategories) {
         this.id = id;
         this.shopName=shopName;
         this.shopUser=shopUser;
-        this.categories = categories;
+        this.shopCategories = shopCategories;
     }
 
-    //getter ve setterlar eklenecek
+    public int getId() {
+        return id;
+    }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public User getShopUser() {
+        return shopUser;
+    }
+
+    public void setShopUser(User shopUser) {
+        this.shopUser = shopUser;
+    }
+
+    public List<ProductCategory> getCategories() {
+        return shopCategories;
+    }
+
+    public void setCategories(List<ProductCategory> shopCategories) {
+        this.shopCategories = shopCategories;
+    }
 }

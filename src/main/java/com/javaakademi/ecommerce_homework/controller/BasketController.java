@@ -1,5 +1,6 @@
 package com.javaakademi.ecommerce_homework.controller;
 
+import com.javaakademi.ecommerce_homework.entity.Basket;
 import com.javaakademi.ecommerce_homework.request.BasketRequest;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import com.javaakademi.ecommerce_homework.service.BasketService;
@@ -14,20 +15,19 @@ public class BasketController {
     @Autowired
     private BasketService basketService;
 
-    @PostMapping("/{id}")
-    public BasketResponse addProductInBasket(@RequestBody BasketRequest request, @PathVariable int id){
-        return basketService.addProductInBasket(request,id);
+    @PostMapping("/{userID}")
+    public BasketResponse createBasketForUser(@PathVariable int userID) {
+        return basketService.createBasketForUser(userID);
     }
+
     @GetMapping
-    public List<BasketResponse> getAllItems(){
-        return basketService.getAllProductsInBasket();
+    public List<BasketResponse> findAll() {
+        return basketService.findAll();
     }
-    @DeleteMapping("/{basketId}/{productId}")
-    public void removeProductFromBasket(@PathVariable int basketId,@PathVariable int productId){
-        basketService.deleteProductByIdFromBasket(basketId,productId);
+
+    @PutMapping("/{productID}/{basketID}")
+    public void addAmountOfProductOneByOne(@PathVariable int productID, @PathVariable int basketID) {
+        basketService.addAmountOfProductOneByOne(productID, basketID);
     }
-    @PutMapping("/{basketID}/{userID}")
-    public BasketResponse doPaymentAndEmptyBasket(@PathVariable int basketID,@PathVariable int userID){
-        return basketService.doPaymentAndEmptyBasket(basketID,userID);
-    }
+
 }
