@@ -7,28 +7,19 @@ public class UserRequest {
     private String userpassword;
     private String useradress;
     private double usermoney;
-    private String shopName;
 
     public UserRequest() {
     }
 
-    public UserRequest(String username, String usersurname, String useremail, String userpassword, String useradress, double usermoney, String shopName) {
+    public UserRequest(String username, String usersurname, String useremail, String userpassword, String useradress, double usermoney) {
         this.username = username;
         this.usersurname = usersurname;
         this.useremail = useremail;
         this.userpassword = userpassword;
         this.useradress = useradress;
         this.usermoney = usermoney;
-        this.shopName = shopName;
     }
 
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
 
     public String getUseradress() {
         return useradress;

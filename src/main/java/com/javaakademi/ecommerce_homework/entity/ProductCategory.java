@@ -1,5 +1,6 @@
 package com.javaakademi.ecommerce_homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -10,6 +11,27 @@ public class ProductCategory {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String name;
+    @OneToMany
+    private List<Product> products;
+    @ManyToOne
+    @JsonIgnore
+    private Shop shop;
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public void setShop(Shop shop) {
+        this.shop = shop;
+    }
 
     public ProductCategory(){}
 

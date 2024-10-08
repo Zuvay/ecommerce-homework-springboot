@@ -10,7 +10,7 @@ public class BasketProduct {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private int basketProductAmount;
-    @ManyToOne
+    @OneToOne
     private Product product; //ürünler birden çok basketproduct'ta bulunabilir
     @ManyToOne
     private Basket basket; //Bir sepette birden çok basketproduct

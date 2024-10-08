@@ -6,23 +6,14 @@ public class UserResponse {
     private String useremail;
     private String useradress;
     private double usermoney;
-    private String shopName;
 
-    public UserResponse(String username, String usersurname, String useremail, String useradress, double usermoney, String shopName) {
+
+    public UserResponse(String username, String usersurname, String useremail, String useradress, double usermoney) {
         this.username = username;
         this.usersurname = usersurname;
         this.useremail = useremail;
         this.useradress = useradress;
         this.usermoney = usermoney;
-        this.shopName = shopName;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
     }
 
     public String getUseradress() {

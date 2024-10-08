@@ -11,15 +11,22 @@ public class Product {
     private int id;
     private String name;
     private double price;
-    @OneToMany
-    private List<ProductCategory> categories;
+    @ManyToOne
+    private ProductCategory category;
     public Product(){}
 
-    public Product(int id, String name, double price, List<ProductCategory> categories) {
+    public Product(int id, String name, double price) {
         this.id = id;
         this.name = name;
         this.price = price;
-        this.categories = categories;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 
     public int getId() {
@@ -44,13 +51,5 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
-    }
-
-    public List<ProductCategory> getCategories() {
-        return categories;
-    }
-
-    public void setCategories(List<ProductCategory> categories) {
-        this.categories = categories;
     }
 }

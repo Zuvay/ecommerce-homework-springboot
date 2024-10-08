@@ -5,14 +5,14 @@ import java.util.List;
 public class ProductRequest {
     private String name;
     private double price;
-    private List<String> categoryNames;
+    private String categoryName;
 
     public ProductRequest(){}
 
-    public ProductRequest(String name, double price, int amount, List<String> categoryNames) {
+    public ProductRequest(String name, double price, String categoryName) {
         this.name = name;
         this.price = price;
-        this.categoryNames = categoryNames;
+        this.categoryName = categoryName;
     }
 
     public String getName() {
@@ -31,16 +31,11 @@ public class ProductRequest {
         this.price = price;
     }
 
-    public List<String> getCategoryNames() {
-        return categoryNames;
+    public String getCategoryName() {
+        return categoryName;
     }
 
-    public void setCategoryNames(List<String> categoryNames) {
-        this.categoryNames = categoryNames;
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
     }
 }
-
-
-
-
-

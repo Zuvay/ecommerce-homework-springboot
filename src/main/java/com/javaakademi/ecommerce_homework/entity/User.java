@@ -3,7 +3,6 @@ package com.javaakademi.ecommerce_homework.entity;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 public class User {
@@ -16,13 +15,11 @@ public class User {
     private String userpassword;
     private String useradress;
     private double usermoney;
-    @OneToMany
-    private List<Basket> userBaskets;
-    @OneToOne(cascade = CascadeType.PERSIST) //Bu sayede, Shop nesnesini save etmenize gerek kalmaz, çünkü User kaydedildiğinde Shop da otomatik kaydedilir.
-    private Shop userShop;
+    @OneToOne(cascade = CascadeType.PERSIST)
+    private Basket userBasket;
     public User(){}
 
-    public User(int id, String username, String usersurname, String useremail, String userpassword, String useradress, double usermoney, List<Basket> userBaskets, Shop userShop) {
+    public User(int id, String username, String usersurname, String useremail, String userpassword, String useradress, double usermoney, Basket userBasket) {
         this.id = id;
         this.username = username;
         this.usersurname = usersurname;
@@ -30,8 +27,7 @@ public class User {
         this.userpassword = userpassword;
         this.useradress = useradress;
         this.usermoney = usermoney;
-        this.userBaskets = userBaskets;
-        this.userShop = userShop;
+        this.userBasket = userBasket;
     }
 
     public int getId() {
@@ -90,19 +86,12 @@ public class User {
         this.usermoney = usermoney;
     }
 
-    public List<Basket> getUserBaskets() {
-        return userBaskets;
+    public Basket getUserBasket() {
+        return userBasket;
     }
 
-    public void setUserBaskets(List<Basket> userBaskets) {
-        this.userBaskets = userBaskets;
+    public void setUserBasket(Basket userBasket) {
+        this.userBasket = userBasket;
     }
 
-    public Shop getUserShop() {
-        return userShop;
-    }
-
-    public void setUserShop(Shop userShop) {
-        this.userShop = userShop;
-    }
 }

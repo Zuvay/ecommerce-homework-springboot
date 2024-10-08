@@ -29,19 +29,7 @@ public class UserService {
     public UserResponse createUser(UserRequest userRequest) {
         User entity = toEntity(userRequest);
         userRepository.save(entity);
-        if(entity.getUserShop() == null){
-            createAndAssignShopIfIsNull(userRequest,entity);
-        }
         return toResponse(entity);
-    }
-
-    private void createAndAssignShopIfIsNull(UserRequest userRequest, User user) {
-        Shop entityShop = new Shop();
-        entityShop.setShopName(userRequest.getShopName());
-        entityShop.setShopUser(user);
-        user.setUserShop(entityShop);
-
-        shopRepository.save(entityShop);
     }
 
     public void deleteUser(int userID) {
@@ -88,7 +76,6 @@ public class UserService {
         userResponse.setUseremail(user.getUseremail());
         userResponse.setUseradress(user.getUseradress());
         userResponse.setUsermoney(user.getUsermoney());
-        userResponse.setShopName(user.getUserShop().getShopName());
         return userResponse;
     }
 }

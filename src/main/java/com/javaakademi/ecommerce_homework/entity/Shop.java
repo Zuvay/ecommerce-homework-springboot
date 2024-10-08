@@ -10,16 +10,15 @@ public class Shop {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String shopName;
-    @OneToOne
-    private User shopUser;
     @OneToMany
     private List<ProductCategory> shopCategories;
-    public Shop(){}
 
-    public Shop(int id, String shopName,User shopUser, List<ProductCategory> shopCategories) {
+    public Shop() {
+    }
+
+    public Shop(int id, String shopName, List<ProductCategory> shopCategories) {
         this.id = id;
-        this.shopName=shopName;
-        this.shopUser=shopUser;
+        this.shopName = shopName;
         this.shopCategories = shopCategories;
     }
 
@@ -37,14 +36,6 @@ public class Shop {
 
     public void setShopName(String shopName) {
         this.shopName = shopName;
-    }
-
-    public User getShopUser() {
-        return shopUser;
-    }
-
-    public void setShopUser(User shopUser) {
-        this.shopUser = shopUser;
     }
 
     public List<ProductCategory> getCategories() {

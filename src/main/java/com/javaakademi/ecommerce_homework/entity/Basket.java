@@ -10,21 +10,29 @@ public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @ManyToOne
-    @JsonIgnore
-    private User user;
-    @OneToMany
+    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<BasketProduct> basketProducts; //bir sepette birden çok sepet ürünü olabilir.
+    @OneToOne
+    private User user;
+
 
     private String status;
-    
-    public Basket(){}
 
-    public Basket(int id, User user_id, List<BasketProduct> basketProducts,String status) {
+    public Basket() {
+    }
+
+    public Basket(int id, List<BasketProduct> basketProducts, String status) {
         this.id = id;
-        this.user = user_id;
         this.basketProducts = basketProducts;
-        this.status=status;
+        this.status = status;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getStatus() {
@@ -41,14 +49,6 @@ public class Basket {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public List<BasketProduct> getBasketProducts() {

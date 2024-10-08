@@ -1,7 +1,7 @@
 package com.javaakademi.ecommerce_homework.controller;
 
+
 import com.javaakademi.ecommerce_homework.entity.Basket;
-import com.javaakademi.ecommerce_homework.request.BasketRequest;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import com.javaakademi.ecommerce_homework.service.BasketService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +18,10 @@ public class BasketController {
     @PostMapping("/{userID}")
     public BasketResponse createBasketForUser(@PathVariable int userID) {
         return basketService.createBasketForUser(userID);
+    }
+    @PostMapping("/addbasketproduct/{basketProductID}/{basketID}")
+    public void addBasketProduct(@PathVariable int basketProductID,@PathVariable int basketID){
+         basketService.putBasketProductInBasket(basketProductID,basketID);
     }
 
     @GetMapping
