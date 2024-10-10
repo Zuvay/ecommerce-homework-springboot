@@ -5,7 +5,6 @@ import com.javaakademi.ecommerce_homework.entity.BasketProduct;
 import com.javaakademi.ecommerce_homework.entity.User;
 import com.javaakademi.ecommerce_homework.repository.BasketProductRepository;
 import com.javaakademi.ecommerce_homework.repository.BasketRepository;
-import com.javaakademi.ecommerce_homework.repository.ProductRepository;
 import com.javaakademi.ecommerce_homework.repository.UserRepository;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 public class BasketService {
