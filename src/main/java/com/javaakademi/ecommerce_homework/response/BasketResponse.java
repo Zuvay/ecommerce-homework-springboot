@@ -5,16 +5,19 @@ import com.javaakademi.ecommerce_homework.entity.Basket;
 import java.util.List;
 
 public class BasketResponse {
-    private List<ProductAmount> products;
     private String user;
     private String status;
+    private double totalBasketCount;
 
-    public BasketResponse(List<ProductAmount> products, String user, String status) {
-        this.products = products;
+
+    public BasketResponse(){}
+
+    public BasketResponse(String user, String status, double totalBasketCount) {
         this.user = user;
         this.status = status;
+        this.totalBasketCount = totalBasketCount;
+
     }
-    public BasketResponse(){}
 
     public String getUser() {
         return user;
@@ -32,11 +35,12 @@ public class BasketResponse {
         this.status = status;
     }
 
-    public List<ProductAmount> getProducts() {
-        return products;
+    public double getTotalBasketCount() {
+        return totalBasketCount;
     }
 
-    public void setProducts(List<ProductAmount> products) {
-        this.products = products;
+    public void setTotalBasketCount(double totalBasketCount) {
+        this.totalBasketCount = totalBasketCount;
     }
+
 }

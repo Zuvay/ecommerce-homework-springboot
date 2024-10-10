@@ -1,6 +1,5 @@
 package com.javaakademi.ecommerce_homework.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -10,12 +9,11 @@ public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<BasketProduct> basketProducts; //bir sepette birden çok sepet ürünü olabilir.
+    @OneToMany
+    private List<BasketProduct> basketProducts;
     @OneToOne
     private User user;
-
-
+    private double totalBasketCount;
     private String status;
 
     public Basket() {
@@ -25,6 +23,14 @@ public class Basket {
         this.id = id;
         this.basketProducts = basketProducts;
         this.status = status;
+    }
+
+    public double getTotalBasketCount() {
+        return totalBasketCount;
+    }
+
+    public void setTotalBasketCount(double totalBasketCount) {
+        this.totalBasketCount = totalBasketCount;
     }
 
     public User getUser() {

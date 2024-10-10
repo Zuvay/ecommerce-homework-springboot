@@ -15,11 +15,9 @@ public class User {
     private String userpassword;
     private String useradress;
     private double usermoney;
-    @OneToOne(cascade = CascadeType.PERSIST)
-    private Basket userBasket;
     public User(){}
 
-    public User(int id, String username, String usersurname, String useremail, String userpassword, String useradress, double usermoney, Basket userBasket) {
+    public User(int id, String username, String usersurname, String useremail, String userpassword, String useradress, double usermoney) {
         this.id = id;
         this.username = username;
         this.usersurname = usersurname;
@@ -27,7 +25,6 @@ public class User {
         this.userpassword = userpassword;
         this.useradress = useradress;
         this.usermoney = usermoney;
-        this.userBasket = userBasket;
     }
 
     public int getId() {
@@ -84,14 +81,6 @@ public class User {
 
     public void setUsermoney(double usermoney) {
         this.usermoney = usermoney;
-    }
-
-    public Basket getUserBasket() {
-        return userBasket;
-    }
-
-    public void setUserBasket(Basket userBasket) {
-        this.userBasket = userBasket;
     }
 
 }

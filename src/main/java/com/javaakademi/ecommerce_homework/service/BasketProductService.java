@@ -21,20 +21,25 @@ public class BasketProductService {
     @Autowired
     private ProductRepository productRepository;
 
-    public BasketProductResponse createBasketProduct(int productID){
+    public BasketProduct createBasketProduct(int productID){
         BasketProduct basketProduct = new BasketProduct();
         Product product = productRepository.findById(productID).orElseThrow();
         basketProduct.setProduct(product);
         basketProduct.setBasketProductAmount(1);
+        basketProduct.setTotalBasketProductCount(product.getPrice() * basketProduct.getBasketProductAmount());
         basketProductRepository.save(basketProduct);
-        return toResponse(basketProduct);
+        return basketProduct;
     }
-    public BasketProductResponse toResponse(BasketProduct product){
-        BasketProductResponse response = new BasketProductResponse();
-        response.setBasketProductAmount(product.getBasketProductAmount());
-        response.setProduct(product.getProduct().getName());
-        response.setBasketID(response.getBasketID());
-        return response;
-    }
+//    public BasketProductResponse toResponse(BasketProduct product){
+//        BasketProductResponse response = new BasketProductResponse();
+//        response.setBasketProductAmount(product.getBasketProductAmount());
+//        response.setProduct(product.getProduct().getName());
+//        response.setBasketID(response.getBasketID());
+//
+//        double productPrice = product.getProduct().getPrice();
+//        int productAmount = product.getBasketProductAmount();
+//        response.setTotalBasketProductCount(productAmount*productPrice);
+//        return response;
+//    }
 
 }

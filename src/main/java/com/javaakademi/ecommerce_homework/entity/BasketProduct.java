@@ -10,10 +10,11 @@ public class BasketProduct {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private int basketProductAmount;
+    private double totalBasketProductCount;
     @OneToOne
-    private Product product; //ürünler birden çok basketproduct'ta bulunabilir
+    private Product product;
     @ManyToOne
-    private Basket basket; //Bir sepette birden çok basketproduct
+    private Basket basket;
 
     public BasketProduct(){}
 
@@ -38,6 +39,14 @@ public class BasketProduct {
 
     public void setBasketProductAmount(int basketProductAmount) {
         this.basketProductAmount = basketProductAmount;
+    }
+
+    public double getTotalBasketProductCount() {
+        return totalBasketProductCount;
+    }
+
+    public void setTotalBasketProductCount(double totalBasketProductCount) {
+        this.totalBasketProductCount = totalBasketProductCount;
     }
 
     public Product getProduct() {

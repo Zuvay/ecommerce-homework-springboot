@@ -15,23 +15,14 @@ public class BasketController {
     @Autowired
     private BasketService basketService;
 
-    @PostMapping("/{userID}")
-    public BasketResponse createBasketForUser(@PathVariable int userID) {
-        return basketService.createBasketForUser(userID);
-    }
-    @PostMapping("/addbasketproduct/{basketProductID}/{basketID}")
-    public void addBasketProduct(@PathVariable int basketProductID,@PathVariable int basketID){
-         basketService.putBasketProductInBasket(basketProductID,basketID);
-    }
-
     @GetMapping
     public List<BasketResponse> findAll() {
         return basketService.findAll();
     }
 
-    @PutMapping("/{productID}/{basketID}")
-    public void addAmountOfProductOneByOne(@PathVariable int productID, @PathVariable int basketID) {
-        basketService.addAmountOfProductOneByOne(productID, basketID);
+    @PostMapping("/{productID}/{userID}")
+    public void addBasketProductToBasket(@PathVariable int productID, @PathVariable int userID) {
+        basketService.addProductInBasket(productID,userID);
     }
 
 }

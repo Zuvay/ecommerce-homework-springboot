@@ -2,9 +2,22 @@ package com.javaakademi.ecommerce_homework.response;
 
 
 public class BasketProductResponse {
-    private int basketProductAmount;
+    private double basketProductAmount;
+    private double totalBasketProductCount;
     private String product;
     private int basketID;
+
+    public void setBasketProductAmount(double basketProductAmount) {
+        this.basketProductAmount = basketProductAmount;
+    }
+
+    public double getTotalBasketProductCount() {
+        return totalBasketProductCount;
+    }
+
+    public void setTotalBasketProductCount(double totalBasketProductCount) {
+        this.totalBasketProductCount = totalBasketProductCount;
+    }
 
     public int getBasketID() {
         return basketID;
@@ -14,14 +27,15 @@ public class BasketProductResponse {
         this.basketID = basketID;
     }
 
-    public BasketProductResponse(){}
+    public BasketProductResponse() {
+    }
 
-    public BasketProductResponse(int basketProductAmount, String product) {
+    public BasketProductResponse(double basketProductAmount, String product) {
         this.basketProductAmount = basketProductAmount;
         this.product = product;
     }
 
-    public int getBasketProductAmount() {
+    public double getBasketProductAmount() {
         return basketProductAmount;
     }
 

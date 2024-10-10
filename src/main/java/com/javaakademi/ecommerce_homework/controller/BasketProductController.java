@@ -15,8 +15,4 @@ public class BasketProductController {
     @Autowired
     private BasketProductService basketProductService;
 
-    @PostMapping("/{productID}")
-    public BasketProductResponse createBasketProduct(@PathVariable int productID){
-        return basketProductService.createBasketProduct(productID);
-    }
 }
