@@ -16,7 +16,8 @@ public class BasketProduct {
     @ManyToOne
     private Basket basket;
 
-    public BasketProduct(){}
+    public BasketProduct() {
+    }
 
     public BasketProduct(int id, int basketProductAmount, Product product, Basket basket) {
         this.id = id;

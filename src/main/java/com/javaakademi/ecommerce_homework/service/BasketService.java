@@ -29,25 +29,30 @@ public class BasketService {
         User user = userRepository.findById(userID).orElseThrow();
         Basket basket = basketRepository.findByUser(user);
 
-        // Sepeti kontrol et yoksa basket değişkenini yeni oluşturduğun ile değiştir
-        if (basket == null) {
-            basket = createBasketForUser(userID);
+        if (basket != null) {
+            basket = createBasketForUser(userID); //sepet yoksa oluştur
+        } else {
+            basketExistAddNewProduct(productID, basket); //sepet varsa ürünü ekle
         }
+    }
 
+    private void basketExistAddNewProduct(int productID, Basket basket) {
         BasketProduct basketProduct = basketProductService.createBasketProduct(productID);
 
         if (isBasketProductInBasket(basketProduct, basket)) {
             addAmountOfProductOneByOne(productID, basket.getId()); // Ürün varsa miktarı arttır
         } else {
-            // Ürün yoksa yeni ekle
-            basketProduct.setBasket(basket);
-            List<BasketProduct> basketProductsList = basket.getBasketProducts();
-            basketProductsList.add(basketProduct);
-            basket.setBasketProducts(basketProductsList);
-            basketProductRepository.save(basketProduct);
+            addProduct(basketProduct, basket); //ürün sepette yoksa ürünü sepete ekle
         }
-
         basketRepository.save(basket);
+    }
+
+    private void addProduct(BasketProduct basketProduct, Basket basket) {
+        basketProduct.setBasket(basket);
+        List<BasketProduct> basketProductsList = basket.getBasketProducts();
+        basketProductsList.add(basketProduct);
+        basket.setBasketProducts(basketProductsList);
+        basketProductRepository.save(basketProduct);
     }
 
     private boolean isBasketProductInBasket(BasketProduct basketProduct, Basket basket) {
