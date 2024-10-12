@@ -8,10 +8,11 @@ import java.util.List;
 @Entity
 public class ProductCategory {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
     @OneToMany
+    @JsonIgnore
     private List<Product> products;
     @ManyToOne
     @JsonIgnore

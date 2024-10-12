@@ -14,32 +14,33 @@ import java.util.List;
 
 @Service
 public class BasketProductService {
+
     @Autowired
     private BasketProductRepository basketProductRepository;
     @Autowired
-    private BasketRepository basketRepository;
-    @Autowired
     private ProductRepository productRepository;
 
-    public BasketProduct createBasketProduct(int productID){
-        BasketProduct basketProduct = new BasketProduct();
+    public BasketProduct createBasketProduct(int productID, Basket basket){
         Product product = productRepository.findById(productID).orElseThrow();
-        basketProduct.setProduct(product);
-        basketProduct.setBasketProductAmount(1);
-        basketProduct.setTotalBasketProductCount(product.getPrice() * basketProduct.getBasketProductAmount());
-        basketProductRepository.save(basketProduct);
-        return basketProduct;
-    }
-//    public BasketProductResponse toResponse(BasketProduct product){
-//        BasketProductResponse response = new BasketProductResponse();
-//        response.setBasketProductAmount(product.getBasketProductAmount());
-//        response.setProduct(product.getProduct().getName());
-//        response.setBasketID(response.getBasketID());
-//
-//        double productPrice = product.getProduct().getPrice();
-//        int productAmount = product.getBasketProductAmount();
-//        response.setTotalBasketProductCount(productAmount*productPrice);
-//        return response;
-//    }
 
+        // Öncelikle ürün sepette zaten var mı diye kontrol et
+        BasketProduct existingBasketProduct = basketProductRepository.findByProductAndBasket(product, basket);
+
+        if (existingBasketProduct != null) {
+            // Ürün zaten sepette mevcut ürünü döndür
+            return basketProductRepository.save(existingBasketProduct);
+        } else {
+            // Ürün yok yenisini oluştur
+            return createNewBasketProduct(product,basket);
+        }
+    }
+    public BasketProduct createNewBasketProduct(Product product,Basket basket){
+        BasketProduct newBasketProduct = new BasketProduct();
+        newBasketProduct.setProduct(product);
+        newBasketProduct.setBasket(basket);
+        newBasketProduct.setBasketProductAmount(1);
+        newBasketProduct.setTotalBasketProductCount(product.getPrice() * newBasketProduct.getBasketProductAmount());
+        return basketProductRepository.save(newBasketProduct);
+    }
 }
+

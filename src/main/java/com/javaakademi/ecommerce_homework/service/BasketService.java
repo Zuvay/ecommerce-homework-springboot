@@ -13,9 +13,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Service
 public class BasketService {
+
     @Autowired
     private BasketRepository basketRepository;
     @Autowired
@@ -33,17 +33,15 @@ public class BasketService {
             basket = createBasketForUser(userID);
         }
         return basketExistAddNewProduct(productID, basket);
-
     }
 
     private BasketResponse basketExistAddNewProduct(int productID, Basket basket) {
-        BasketProduct basketProduct = basketProductService.createBasketProduct(productID);
+        BasketProduct basketProduct = basketProductService.createBasketProduct(productID, basket);
 
         if (isBasketProductInBasket(basketProduct, basket)) {
-            basketProduct.setBasketProductAmount(basketProduct.getBasketProductAmount()+1);
-            basketProductRepository.save(basketProduct);
+            addAmountOfProductOneByOne(productID, basket.getId());
         } else {
-            addProduct(basketProduct, basket); //ürün sepette yoksa ürünü sepete ekle
+            addProduct(basketProduct, basket); // Ürün sepette yoksa ürünü sepete ekle
         }
         return toResponse(basketRepository.save(basket));
     }
@@ -58,7 +56,6 @@ public class BasketService {
         basket.setBasketProducts(basketProductsList);
         basketProductRepository.save(basketProduct);
     }
-
 
     private boolean isBasketProductInBasket(BasketProduct basketProduct, Basket basket) {
         for (BasketProduct basketProduct1 : basket.getBasketProducts()) {
@@ -87,18 +84,18 @@ public class BasketService {
         BasketResponse basketResponse = new BasketResponse();
         basketResponse.setStatus(basket.getStatus());
         basketResponse.setUser(basket.getUser().getUsername());
+        basketResponse.setBasketProducts(basket.getBasketProducts());
 
         List<BasketProduct> basketProducts = basket.getBasketProducts();
         double totalCountForBasket = countBasketProductsInBasket(basketProducts); // Ürünleri toplama fonksiyonu
         basketResponse.setTotalBasketCount(totalCountForBasket); // Sepetteki tüm ürünlerin toplamı
-
         return basketResponse;
     }
 
     private double countBasketProductsInBasket(List<BasketProduct> basketProducts) {
         double totalCountForBasket = 0;
         for (BasketProduct basketProduct : basketProducts) {
-            totalCountForBasket += basketProduct.getBasketProductAmount();
+            totalCountForBasket += basketProduct.getTotalBasketProductCount();
         }
         return totalCountForBasket;
     }
@@ -112,14 +109,15 @@ public class BasketService {
         return basketResponses;
     }
 
-//    public void addAmountOfProductOneByOne(int productID, int basketID) {
-//        Basket basket = basketRepository.findById(basketID).orElseThrow();
-//        List<BasketProduct> products = basket.getBasketProducts();
-//        for (BasketProduct product : products) {
-//            if (product.getProduct().getId() == productID) {
-//                product.setBasketProductAmount(product.getBasketProductAmount() + 1);
-//            }
-//        }
-//        basketRepository.save(basket);
-//    }
+    public void addAmountOfProductOneByOne(int productID, int basketID) {
+        Basket basket = basketRepository.findById(basketID).orElseThrow();
+        List<BasketProduct> products = basket.getBasketProducts();
+        for (BasketProduct product : products) {
+            if (product.getProduct().getId() == productID) {
+                product.setBasketProductAmount(product.getBasketProductAmount() + 1);
+                product.setTotalBasketProductCount(product.getProduct().getPrice() * product.getBasketProductAmount());
+            }
+        }
+        basketRepository.save(basket);
+    }
 }

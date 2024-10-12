@@ -1,5 +1,6 @@
 package com.javaakademi.ecommerce_homework.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -7,13 +8,14 @@ import java.util.List;
 @Entity
 public class BasketProduct {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int basketProductAmount;
     private double totalBasketProductCount;
     @OneToOne
     private Product product;
     @ManyToOne
+    @JsonIgnore
     private Basket basket;
 
     public BasketProduct() {
