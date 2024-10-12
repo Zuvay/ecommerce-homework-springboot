@@ -25,35 +25,40 @@ public class BasketService {
     @Autowired
     private UserRepository userRepository;
 
-    public void addProductInBasket(int productID, int userID) {
+    public BasketResponse addProductInBasket(int productID, int userID) {
         User user = userRepository.findById(userID).orElseThrow();
         Basket basket = basketRepository.findByUser(user);
 
-        if (basket != null) {
-            basket = createBasketForUser(userID); //sepet yoksa oluştur
-        } else {
-            basketExistAddNewProduct(productID, basket); //sepet varsa ürünü ekle
+        if (basket == null) {
+            basket = createBasketForUser(userID);
         }
+        return basketExistAddNewProduct(productID, basket);
+
     }
 
-    private void basketExistAddNewProduct(int productID, Basket basket) {
+    private BasketResponse basketExistAddNewProduct(int productID, Basket basket) {
         BasketProduct basketProduct = basketProductService.createBasketProduct(productID);
 
         if (isBasketProductInBasket(basketProduct, basket)) {
-            addAmountOfProductOneByOne(productID, basket.getId()); // Ürün varsa miktarı arttır
+            basketProduct.setBasketProductAmount(basketProduct.getBasketProductAmount()+1);
+            basketProductRepository.save(basketProduct);
         } else {
             addProduct(basketProduct, basket); //ürün sepette yoksa ürünü sepete ekle
         }
-        basketRepository.save(basket);
+        return toResponse(basketRepository.save(basket));
     }
 
     private void addProduct(BasketProduct basketProduct, Basket basket) {
-        basketProduct.setBasket(basket);
         List<BasketProduct> basketProductsList = basket.getBasketProducts();
+        if (basketProductsList == null) {
+            basketProductsList = new ArrayList<>();
+        }
+        basketProduct.setBasket(basket);
         basketProductsList.add(basketProduct);
         basket.setBasketProducts(basketProductsList);
         basketProductRepository.save(basketProduct);
     }
+
 
     private boolean isBasketProductInBasket(BasketProduct basketProduct, Basket basket) {
         for (BasketProduct basketProduct1 : basket.getBasketProducts()) {
@@ -107,14 +112,14 @@ public class BasketService {
         return basketResponses;
     }
 
-    public void addAmountOfProductOneByOne(int productID, int basketID) {
-        Basket basket = basketRepository.findById(basketID).orElseThrow();
-        List<BasketProduct> products = basket.getBasketProducts();
-        for (BasketProduct product : products) {
-            if (product.getProduct().getId() == productID) {
-                product.setBasketProductAmount(product.getBasketProductAmount() + 1);
-            }
-        }
-        basketRepository.save(basket);
-    }
+//    public void addAmountOfProductOneByOne(int productID, int basketID) {
+//        Basket basket = basketRepository.findById(basketID).orElseThrow();
+//        List<BasketProduct> products = basket.getBasketProducts();
+//        for (BasketProduct product : products) {
+//            if (product.getProduct().getId() == productID) {
+//                product.setBasketProductAmount(product.getBasketProductAmount() + 1);
+//            }
+//        }
+//        basketRepository.save(basket);
+//    }
 }

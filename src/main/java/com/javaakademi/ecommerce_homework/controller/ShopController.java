@@ -13,7 +13,7 @@ public class ShopController {
     @Autowired
     private ShopService shopService;
 
-    @PostMapping("/createshop")
+    @PostMapping()
     public ShopResponse createShop(@RequestBody ShopRequest request) {
         return shopService.createShop(request);
     }

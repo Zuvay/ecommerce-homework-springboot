@@ -21,8 +21,7 @@ public class BasketController {
     }
 
     @PostMapping("/{productID}/{userID}")
-    public void addBasketProductToBasket(@PathVariable int productID, @PathVariable int userID) {
-        basketService.addProductInBasket(productID,userID);
+    public BasketResponse addBasketProductToBasket(@PathVariable int productID, @PathVariable int userID) {
+        return basketService.addProductInBasket(productID,userID);
     }
-
 }
