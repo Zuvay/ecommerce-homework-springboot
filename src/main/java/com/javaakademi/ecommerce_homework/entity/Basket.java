@@ -11,7 +11,7 @@ public class Basket {
     private int id;
     @OneToMany
     private List<BasketProduct> basketProducts;
-    @OneToOne
+    @ManyToOne
     private User user;
     private double totalBasketCount;
     private String status;

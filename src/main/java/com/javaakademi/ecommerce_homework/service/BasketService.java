@@ -88,6 +88,10 @@ public class BasketService {
 
         List<BasketProduct> basketProducts = basket.getBasketProducts();
         double totalCountForBasket = countBasketProductsInBasket(basketProducts); // Ürünleri toplama fonksiyonu
+
+        basket.setTotalBasketCount(totalCountForBasket);
+        basketRepository.save(basket);
+
         basketResponse.setTotalBasketCount(totalCountForBasket); // Sepetteki tüm ürünlerin toplamı
         return basketResponse;
     }
