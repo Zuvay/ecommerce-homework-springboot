@@ -82,5 +82,4 @@ public class User {
     public void setUsermoney(double usermoney) {
         this.usermoney = usermoney;
     }
-
 }

@@ -12,7 +12,7 @@ public class BasketProduct {
     private int id;
     private int basketProductAmount;
     private double totalBasketProductCount;
-    @ManyToOne
+    @OneToOne
     private Product product;
     @ManyToOne
     @JsonIgnore

@@ -8,13 +8,13 @@ import java.util.List;
 
 public class BasketResponse {
     private String user;
-    private String status;
+    private int status;
     private double totalBasketCount;
     private List<BasketProduct> basketProducts;
 
     public BasketResponse(){}
 
-    public BasketResponse(String user, String status, double totalBasketCount) {
+    public BasketResponse(String user, int status, double totalBasketCount) {
         this.user = user;
         this.status = status;
         this.totalBasketCount = totalBasketCount;
@@ -37,11 +37,11 @@ public class BasketResponse {
         this.user = user;
     }
 
-    public String getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

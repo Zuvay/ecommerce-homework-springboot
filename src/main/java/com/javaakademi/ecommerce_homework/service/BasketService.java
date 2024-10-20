@@ -6,6 +6,7 @@ import com.javaakademi.ecommerce_homework.entity.User;
 import com.javaakademi.ecommerce_homework.repository.BasketProductRepository;
 import com.javaakademi.ecommerce_homework.repository.BasketRepository;
 import com.javaakademi.ecommerce_homework.repository.UserRepository;
+import com.javaakademi.ecommerce_homework.request.BasketRequest;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ import java.util.List;
 
 @Service
 public class BasketService {
-
     @Autowired
     private BasketRepository basketRepository;
     @Autowired
@@ -27,11 +27,12 @@ public class BasketService {
 
     public BasketResponse addProductInBasket(int productID, int userID) {
         User user = userRepository.findById(userID).orElseThrow();
-        Basket basket = basketRepository.findByUser(user);
+        Basket basket = basketRepository.findByUserAndBasketStatus(user,BasketStatus.NONE);
 
         if (basket == null) {
             basket = createBasketForUser(userID);
         }
+
         return basketExistAddNewProduct(productID, basket);
     }
 
@@ -48,9 +49,6 @@ public class BasketService {
 
     private void addProduct(BasketProduct basketProduct, Basket basket) {
         List<BasketProduct> basketProductsList = basket.getBasketProducts();
-        if (basketProductsList == null) {
-            basketProductsList = new ArrayList<>();
-        }
         basketProduct.setBasket(basket);
         basketProductsList.add(basketProduct);
         basket.setBasketProducts(basketProductsList);
@@ -73,7 +71,7 @@ public class BasketService {
 
     private Basket createAndAssignBasket(User user) {
         Basket newBasket = new Basket();
-        newBasket.setStatus("Alışverişe devam ediyor");
+        newBasket.setStatus(BasketStatus.NONE);
         newBasket.setBasketProducts(new ArrayList<>());
         newBasket.setUser(user);
         basketRepository.save(newBasket);
@@ -104,15 +102,6 @@ public class BasketService {
         return totalCountForBasket;
     }
 
-    public List<BasketResponse> findAll() {
-        List<Basket> baskets = basketRepository.findAll();
-        List<BasketResponse> basketResponses = new ArrayList<>();
-        for (Basket basket : baskets) {
-            basketResponses.add(toResponse(basket));
-        }
-        return basketResponses;
-    }
-
     public void addAmountOfProductOneByOne(int productID, int basketID) {
         Basket basket = basketRepository.findById(basketID).orElseThrow();
         List<BasketProduct> products = basket.getBasketProducts();
@@ -123,5 +112,14 @@ public class BasketService {
             }
         }
         basketRepository.save(basket);
+    }
+
+    public List<BasketResponse> findAll() {
+        List<Basket> baskets = basketRepository.findAll();
+        List<BasketResponse> basketResponses = new ArrayList<>();
+        for (Basket basket : baskets) {
+            basketResponses.add(toResponse(basket));
+        }
+        return basketResponses;
     }
 }
