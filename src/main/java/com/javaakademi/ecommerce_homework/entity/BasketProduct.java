@@ -10,20 +10,22 @@ public class BasketProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int basketProductAmount;
-    private double totalBasketProductCount;
+    private double basketProductAmount; //total fiyat
+    private int totalBasketProductCount; //ürün sayısı
     @OneToOne
     private Product product;
     @ManyToOne
+    @JoinColumn(name = "basket_id")
     @JsonIgnore
     private Basket basket;
 
     public BasketProduct() {
     }
 
-    public BasketProduct(int id, int basketProductAmount, Product product, Basket basket) {
+    public BasketProduct(int id, double basketProductAmount, int totalBasketProductCount, Product product, Basket basket) {
         this.id = id;
         this.basketProductAmount = basketProductAmount;
+        this.totalBasketProductCount = totalBasketProductCount;
         this.product = product;
         this.basket = basket;
     }
@@ -36,19 +38,19 @@ public class BasketProduct {
         this.id = id;
     }
 
-    public int getBasketProductAmount() {
+    public double getBasketProductAmount() {
         return basketProductAmount;
     }
 
-    public void setBasketProductAmount(int basketProductAmount) {
+    public void setBasketProductAmount(double basketProductAmount) {
         this.basketProductAmount = basketProductAmount;
     }
 
-    public double getTotalBasketProductCount() {
+    public int getTotalBasketProductCount() {
         return totalBasketProductCount;
     }
 
-    public void setTotalBasketProductCount(double totalBasketProductCount) {
+    public void setTotalBasketProductCount(int totalBasketProductCount) {
         this.totalBasketProductCount = totalBasketProductCount;
     }
 

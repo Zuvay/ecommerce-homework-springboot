@@ -38,8 +38,8 @@ public class BasketProductService {
         BasketProduct newBasketProduct = new BasketProduct();
         newBasketProduct.setProduct(product);
         newBasketProduct.setBasket(basket);
-        newBasketProduct.setBasketProductAmount(1);
-        newBasketProduct.setTotalBasketProductCount(product.getPrice() * newBasketProduct.getBasketProductAmount());
+        newBasketProduct.setTotalBasketProductCount(1);
+        newBasketProduct.setBasketProductAmount(product.getPrice() * newBasketProduct.getTotalBasketProductCount());
         return basketProductRepository.save(newBasketProduct);
     }
 }

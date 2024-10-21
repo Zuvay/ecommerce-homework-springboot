@@ -15,7 +15,7 @@ public class ProductCategory {
     @JsonIgnore
     private List<Product> products;
     @ManyToOne
-    @JoinColumn()
+    @JoinColumn(name = "shop_id")
     @JsonIgnore
     private Shop shop;
 

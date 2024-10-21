@@ -1,6 +1,5 @@
 package com.javaakademi.ecommerce_homework.entity;
 
-import com.javaakademi.ecommerce_homework.service.BasketStatus;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,24 +13,24 @@ public class Basket {
     private List<BasketProduct> basketProducts;
     @OneToOne
     private User user;
-    private double totalBasketCount;
-    private BasketStatus status;
+    private double totalBasketAmount; //Total fiyat
+    private int status;
 
     public Basket() {
     }
 
-    public Basket(int id, List<BasketProduct> basketProducts, BasketStatus status) {
+    public Basket(int id, List<BasketProduct> basketProducts, int status) {
         this.id = id;
         this.basketProducts = basketProducts;
         this.status = status;
     }
 
-    public double getTotalBasketCount() {
-        return totalBasketCount;
+    public double getTotalBasketAmount() {
+        return totalBasketAmount;
     }
 
-    public void setTotalBasketCount(double totalBasketCount) {
-        this.totalBasketCount = totalBasketCount;
+    public void setTotalBasketCount(double totalBasketAmount) {
+        this.totalBasketAmount = totalBasketAmount;
     }
 
     public User getUser() {
@@ -42,11 +41,11 @@ public class Basket {
         this.user = user;
     }
 
-    public BasketStatus getStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(BasketStatus status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 

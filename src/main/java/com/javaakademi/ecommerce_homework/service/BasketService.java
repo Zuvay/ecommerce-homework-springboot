@@ -6,7 +6,6 @@ import com.javaakademi.ecommerce_homework.entity.User;
 import com.javaakademi.ecommerce_homework.repository.BasketProductRepository;
 import com.javaakademi.ecommerce_homework.repository.BasketRepository;
 import com.javaakademi.ecommerce_homework.repository.UserRepository;
-import com.javaakademi.ecommerce_homework.request.BasketRequest;
 import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,9 +24,14 @@ public class BasketService {
     @Autowired
     private UserRepository userRepository;
 
+    private final int BASKET_STATUS_NONE = 0;
+    private final int BASKET_STATUS_SALED = 1;
+    private final int BASKET_STATUS_DELIVERED = 2;
+    private final int BASKET_STATUS_CANCELED = 3;
+
     public BasketResponse addProductInBasket(int productID, int userID) {
         User user = userRepository.findById(userID).orElseThrow();
-        Basket basket = basketRepository.findByUserAndBasketStatus(user,BasketStatus.NONE);
+        Basket basket = basketRepository.findByUserAndStatus(user,BASKET_STATUS_NONE);
 
         if (basket == null) {
             basket = createBasketForUser(userID);
@@ -71,7 +75,7 @@ public class BasketService {
 
     private Basket createAndAssignBasket(User user) {
         Basket newBasket = new Basket();
-        newBasket.setStatus(BasketStatus.NONE);
+        newBasket.setStatus(BASKET_STATUS_NONE);
         newBasket.setBasketProducts(new ArrayList<>());
         newBasket.setUser(user);
         basketRepository.save(newBasket);
@@ -90,7 +94,7 @@ public class BasketService {
         basket.setTotalBasketCount(totalCountForBasket);
         basketRepository.save(basket);
 
-        basketResponse.setTotalBasketCount(totalCountForBasket); // Sepetteki tüm ürünlerin toplamı
+        basketResponse.setTotalBasketCount(totalCountForBasket); // Sepetteki tüm ürünlerin miktarı
         return basketResponse;
     }
 
@@ -107,8 +111,8 @@ public class BasketService {
         List<BasketProduct> products = basket.getBasketProducts();
         for (BasketProduct product : products) {
             if (product.getProduct().getId() == productID) {
-                product.setBasketProductAmount(product.getBasketProductAmount() + 1);
-                product.setTotalBasketProductCount(product.getProduct().getPrice() * product.getBasketProductAmount());
+                product.setTotalBasketProductCount(product.getTotalBasketProductCount()+1);
+                product.setBasketProductAmount(product.getProduct().getPrice()*product.getTotalBasketProductCount());
             }
         }
         basketRepository.save(basket);

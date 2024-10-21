@@ -12,6 +12,7 @@ public class Product {
     private String name;
     private double price;
     @ManyToOne
+    @JoinColumn(name = "category_id")
     private ProductCategory category;
     public Product(){}
 
@@ -19,14 +20,6 @@ public class Product {
         this.id = id;
         this.name = name;
         this.price = price;
-    }
-
-    public ProductCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(ProductCategory category) {
-        this.category = category;
     }
 
     public int getId() {
@@ -51,5 +44,13 @@ public class Product {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
     }
 }
