@@ -20,12 +20,6 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private BasketRepository basketRepository;
-
-    @Autowired
-    private ShopRepository shopRepository;
-
     public UserResponse createUser(UserRequest userRequest) {
         User entity = toEntity(userRequest);
         userRepository.save(entity);
@@ -77,5 +71,8 @@ public class UserService {
         userResponse.setUseradress(user.getUseradress());
         userResponse.setUsermoney(user.getUsermoney());
         return userResponse;
+    }
+    public User findById(int id){
+        return userRepository.findById(id).orElseThrow();
     }
 }

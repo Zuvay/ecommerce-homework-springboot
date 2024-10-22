@@ -20,9 +20,7 @@ public class BasketService {
     @Autowired
     private BasketProductService basketProductService;
     @Autowired
-    private BasketProductRepository basketProductRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     private final int BASKET_STATUS_NONE = 0;
     private final int BASKET_STATUS_SALED = 1;
@@ -30,11 +28,11 @@ public class BasketService {
     private final int BASKET_STATUS_CANCELED = 3;
 
     public BasketResponse addProductInBasket(int productID, int userID) {
-        User user = userRepository.findById(userID).orElseThrow();
-        Basket basket = basketRepository.findByUserAndStatus(user,BASKET_STATUS_NONE);
+        User user = userService.findById(userID);
+        Basket basket = basketRepository.findByUserAndStatus(user, BASKET_STATUS_NONE);
 
         if (basket == null) {
-            basket = createBasketForUser(userID);
+            basket = createBasketForUser(user);
         }
 
         return basketExistAddNewProduct(productID, basket);
@@ -56,7 +54,7 @@ public class BasketService {
         basketProduct.setBasket(basket);
         basketProductsList.add(basketProduct);
         basket.setBasketProducts(basketProductsList);
-        basketProductRepository.save(basketProduct);
+        basketRepository.save(basket);
     }
 
     private boolean isBasketProductInBasket(BasketProduct basketProduct, Basket basket) {
@@ -68,8 +66,7 @@ public class BasketService {
         return false;
     }
 
-    public Basket createBasketForUser(int userID) {
-        User user = userRepository.findById(userID).orElseThrow();
+    public Basket createBasketForUser(User user) {
         return createAndAssignBasket(user);
     }
 
@@ -89,12 +86,11 @@ public class BasketService {
         basketResponse.setBasketProducts(basket.getBasketProducts());
 
         List<BasketProduct> basketProducts = basket.getBasketProducts();
-        double totalCountForBasket = countBasketProductsInBasket(basketProducts); // Ürünleri toplama fonksiyonu
+        double totalCountForBasket = countBasketProductsInBasket(basketProducts); // Ürünleri sayma
 
         basket.setTotalBasketCount(totalCountForBasket);
-        basketRepository.save(basket);
 
-        basketResponse.setTotalBasketCount(totalCountForBasket); // Sepetteki tüm ürünlerin miktarı
+        basketResponse.setTotalBasketAmount(countBasketAmountInBasket(basketProducts)); // Sepetteki tüm ürünlerin toplam fiyatı
         return basketResponse;
     }
 
@@ -106,15 +102,27 @@ public class BasketService {
         return totalCountForBasket;
     }
 
+    private double countBasketAmountInBasket(List<BasketProduct> basketProducts) {
+        double totalAmountForBasket = 0;
+        for (BasketProduct basketProduct : basketProducts) {
+            totalAmountForBasket += basketProduct.getProduct().getPrice() * basketProduct.getTotalBasketProductCount();
+        }
+        return totalAmountForBasket;
+    }
+
     public void addAmountOfProductOneByOne(int productID, int basketID) {
         Basket basket = basketRepository.findById(basketID).orElseThrow();
         List<BasketProduct> products = basket.getBasketProducts();
+        double totalAmount = 0;
         for (BasketProduct product : products) {
             if (product.getProduct().getId() == productID) {
-                product.setTotalBasketProductCount(product.getTotalBasketProductCount()+1);
-                product.setBasketProductAmount(product.getProduct().getPrice()*product.getTotalBasketProductCount());
+                product.setTotalBasketProductCount(product.getTotalBasketProductCount() + 1);
+                product.setBasketProductAmount(product.getProduct().getPrice() * product.getTotalBasketProductCount());
             }
+            totalAmount = totalAmount + product.getBasketProductAmount();
+
         }
+        basket.setTotalBasketCount(totalAmount);
         basketRepository.save(basket);
     }
 

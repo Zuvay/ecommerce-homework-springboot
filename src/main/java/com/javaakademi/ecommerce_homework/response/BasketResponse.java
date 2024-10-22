@@ -7,7 +7,7 @@ import java.util.List;
 public class BasketResponse {
     private String user;
     private int status;
-    private double totalBasketCount;
+    private double totalBasketAmount;
     private List<BasketProduct> basketProducts;
 
     public BasketResponse(){}
@@ -15,7 +15,7 @@ public class BasketResponse {
     public BasketResponse(String user, int status, double totalBasketCount) {
         this.user = user;
         this.status = status;
-        this.totalBasketCount = totalBasketCount;
+        this.totalBasketAmount = totalBasketCount;
 
     }
 
@@ -35,12 +35,12 @@ public class BasketResponse {
         this.status = status;
     }
 
-    public double getTotalBasketCount() {
-        return totalBasketCount;
+    public double getTotalBasketAmount() {
+        return totalBasketAmount;
     }
 
-    public void setTotalBasketCount(double totalBasketCount) {
-        this.totalBasketCount = totalBasketCount;
+    public void setTotalBasketAmount(double totalBasketAmount) {
+        this.totalBasketAmount = totalBasketAmount;
     }
 
     public List<BasketProduct> getBasketProducts() {

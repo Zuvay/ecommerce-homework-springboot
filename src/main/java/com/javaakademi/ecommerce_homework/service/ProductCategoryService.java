@@ -17,32 +17,38 @@ public class ProductCategoryService {
     @Autowired
     private ProductCategoryRepository productCategoryRepository;
     @Autowired
-    private ShopRepository shopRepository;
+    private ShopService shopService;
 
-    public ProductCategoryResponse createProductCategory(ProductCategoryRequest request,int shopID) {
+    public ProductCategory findByName(String name) {
+        return productCategoryRepository.findByName(name);
+    }
+
+    public ProductCategoryResponse createProductCategory(ProductCategoryRequest request, int shopID) {
         ProductCategory category = toEntity(request);
-        assignCategoryToShop(category,shopID);
+        assignCategoryToShop(category, shopID);
         productCategoryRepository.save(category);
         return toResponse(category);
     }
 
-    private void assignCategoryToShop(ProductCategory category,int shopID) {
-        Shop shop = shopRepository.findById(shopID).orElseThrow();
+    private void assignCategoryToShop(ProductCategory category, int shopID) {
+        Shop shop = shopService.findById(shopID);
         category.setShop(shop);
     }
 
-    public void deleteProductCategory(int id){
+    public void deleteProductCategory(int id) {
         productCategoryRepository.deleteById(id);
     }
-    public List<ProductCategoryResponse> getAllProductCategories(){
+
+    public List<ProductCategoryResponse> getAllProductCategories() {
         List<ProductCategory> categories = productCategoryRepository.findAll();
         List<ProductCategoryResponse> productCategoryResponses = new ArrayList<>();
 
-        for(ProductCategory category:categories){
+        for (ProductCategory category : categories) {
             productCategoryResponses.add(toResponse(category));
         }
         return productCategoryResponses;
     }
+
     public ProductCategoryResponse updateProductCategory(ProductCategoryRequest request, int id) {
         ProductCategory existingCategory = productCategoryRepository.findById(id).orElseThrow(() -> new RuntimeException("Product category not found"));
 
@@ -53,13 +59,13 @@ public class ProductCategoryService {
         return toResponse(existingCategory);
     }
 
-    public ProductCategory toEntity(ProductCategoryRequest request){
+    public ProductCategory toEntity(ProductCategoryRequest request) {
         ProductCategory category = new ProductCategory();
         category.setName(request.getProductCategoryName());
         return category;
     }
 
-    public ProductCategoryResponse toResponse(ProductCategory category){
+    public ProductCategoryResponse toResponse(ProductCategory category) {
         ProductCategoryResponse response = new ProductCategoryResponse();
         response.setProductCategoryName(category.getName());
         response.setShopName(category.getShop().getShopName());

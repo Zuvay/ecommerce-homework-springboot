@@ -14,7 +14,7 @@ public class BasketProduct {
     private int totalBasketProductCount; //ürün sayısı
     @OneToOne
     private Product product;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "basket_id")
     @JsonIgnore
     private Basket basket;

@@ -19,7 +19,11 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
     @Autowired
-    private ProductCategoryRepository categoryRepository;
+    private ProductCategoryService productCategoryService;
+
+    public Product findById(int id){
+        return productRepository.findById(id).orElseThrow();
+    }
 
     public ProductResponse createProduct(ProductRequest request) {
         Product product = toEntity(request);
@@ -36,7 +40,7 @@ public class ProductService {
         product.setName(request.getName());
         product.setPrice(request.getPrice());
 
-        ProductCategory productCategory = categoryRepository.findByName(request.getCategoryName());
+        ProductCategory productCategory = productCategoryService.findByName(request.getCategoryName());
         product.setCategory(productCategory);
         return product;
     }

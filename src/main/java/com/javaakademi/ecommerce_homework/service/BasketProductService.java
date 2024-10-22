@@ -18,10 +18,10 @@ public class BasketProductService {
     @Autowired
     private BasketProductRepository basketProductRepository;
     @Autowired
-    private ProductRepository productRepository;
+    private ProductService productService;
 
-    public BasketProduct createBasketProduct(int productID, Basket basket){
-        Product product = productRepository.findById(productID).orElseThrow();
+    public BasketProduct createBasketProduct(int productID, Basket basket) {
+        Product product = productService.findById(productID);
 
         // Öncelikle ürün sepette zaten var mı diye kontrol et
         BasketProduct existingBasketProduct = basketProductRepository.findByProductAndBasket(product, basket);
@@ -31,10 +31,11 @@ public class BasketProductService {
             return basketProductRepository.save(existingBasketProduct);
         } else {
             // Ürün yok yenisini oluştur
-            return createNewBasketProduct(product,basket);
+            return createNewBasketProduct(product, basket);
         }
     }
-    public BasketProduct createNewBasketProduct(Product product,Basket basket){
+
+    public BasketProduct createNewBasketProduct(Product product, Basket basket) {
         BasketProduct newBasketProduct = new BasketProduct();
         newBasketProduct.setProduct(product);
         newBasketProduct.setBasket(basket);

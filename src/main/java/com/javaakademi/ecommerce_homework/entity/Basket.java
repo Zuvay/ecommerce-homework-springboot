@@ -9,7 +9,7 @@ public class Basket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private List<BasketProduct> basketProducts;
     @OneToOne
     private User user;

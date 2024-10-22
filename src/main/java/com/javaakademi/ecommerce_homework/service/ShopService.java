@@ -17,10 +17,9 @@ public class ShopService {
     @Autowired
     private ShopRepository shopRepository;
 
-    @Autowired
-    private ProductCategoryService productCategoryService;
-    @Autowired
-    private ProductCategoryRepository productCategoryRepository;
+    public Shop findById(int id){
+        return shopRepository.findById(id).orElseThrow();
+    }
 
     public ShopResponse createShop(ShopRequest shopRequest){
         Shop shop = toEntity(shopRequest);
