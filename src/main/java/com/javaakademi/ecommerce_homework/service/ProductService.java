@@ -1,5 +1,6 @@
 package com.javaakademi.ecommerce_homework.service;
 
+import com.javaakademi.ecommerce_homework.dto.ProductDto;
 import com.javaakademi.ecommerce_homework.entity.Product;
 import com.javaakademi.ecommerce_homework.entity.ProductCategory;
 import com.javaakademi.ecommerce_homework.repository.ProductCategoryRepository;
@@ -53,4 +54,13 @@ public class ProductService {
         return productResponse;
     }
 
+    public ProductDto toDto(Product product) {
+        return  ProductDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .categoryId(product.getCategory().getId())
+                .build();
+
+    }
 }

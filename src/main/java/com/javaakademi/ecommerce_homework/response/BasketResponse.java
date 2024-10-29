@@ -1,53 +1,20 @@
 package com.javaakademi.ecommerce_homework.response;
 
+import com.javaakademi.ecommerce_homework.dto.BasketProductDto;
 import com.javaakademi.ecommerce_homework.entity.BasketProduct;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
-
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BasketResponse {
-    private String user;
+    private String userId;
     private int status;
     private double totalBasketAmount;
-    private List<BasketProduct> basketProducts;
-
-    public BasketResponse(){}
-
-    public BasketResponse(String user, int status, double totalBasketCount) {
-        this.user = user;
-        this.status = status;
-        this.totalBasketAmount = totalBasketCount;
-
-    }
-
-    public String getUser() {
-        return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public double getTotalBasketAmount() {
-        return totalBasketAmount;
-    }
-
-    public void setTotalBasketAmount(double totalBasketAmount) {
-        this.totalBasketAmount = totalBasketAmount;
-    }
-
-    public List<BasketProduct> getBasketProducts() {
-        return basketProducts;
-    }
-
-    public void setBasketProducts(List<BasketProduct> basketProducts) {
-        this.basketProducts = basketProducts;
-    }
+    private List<BasketProductDto> basketProducts;
 }

@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/basketproducts")
+@RequestMapping("/basket-products")
 public class BasketProductController {
     @Autowired
-    private BasketProductService basketProductService;
+    private BasketProductService service;
 
 }

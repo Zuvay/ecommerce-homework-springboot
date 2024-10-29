@@ -1,5 +1,6 @@
 package com.javaakademi.ecommerce_homework.service;
 
+import com.javaakademi.ecommerce_homework.dto.BasketProductDto;
 import com.javaakademi.ecommerce_homework.entity.Basket;
 import com.javaakademi.ecommerce_homework.entity.BasketProduct;
 import com.javaakademi.ecommerce_homework.entity.Product;
@@ -10,6 +11,7 @@ import com.javaakademi.ecommerce_homework.response.BasketProductResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,6 +44,23 @@ public class BasketProductService {
         newBasketProduct.setTotalBasketProductCount(1);
         newBasketProduct.setBasketProductAmount(product.getPrice() * newBasketProduct.getTotalBasketProductCount());
         return basketProductRepository.save(newBasketProduct);
+    }
+
+    public List<BasketProductDto> toDtoList(List<BasketProduct> basketProducts) {
+        List<BasketProductDto> basketProductDtos=new ArrayList<>();
+        for (BasketProduct basketProduct : basketProducts) {
+            basketProductDtos.add(toDto(basketProduct));
+        }
+        return null;
+    }
+
+    private BasketProductDto toDto(BasketProduct basketProduct) {
+
+        return   BasketProductDto.builder().basketProductAmount(basketProduct.getBasketProductAmount())
+                .basketId(basketProduct.getBasket().getId())
+                .id(basketProduct.getId())
+                .product(productService.toDto(basketProduct.getProduct()))
+                .totalBasketProductCount(basketProduct.getTotalBasketProductCount()).build();
     }
 }
 

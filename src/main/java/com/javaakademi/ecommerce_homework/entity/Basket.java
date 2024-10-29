@@ -19,33 +19,11 @@ public class Basket {
     public Basket() {
     }
 
-    public Basket(int id, List<BasketProduct> basketProducts, int status) {
+    public Basket(int id, List<BasketProduct> basketProducts, User user, double totalBasketAmount, int status) {
         this.id = id;
         this.basketProducts = basketProducts;
-        this.status = status;
-    }
-
-    public double getTotalBasketAmount() {
-        return totalBasketAmount;
-    }
-
-    public void setTotalBasketCount(double totalBasketAmount) {
-        this.totalBasketAmount = totalBasketAmount;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
         this.user = user;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
+        this.totalBasketAmount = totalBasketAmount;
         this.status = status;
     }
 
@@ -63,5 +41,29 @@ public class Basket {
 
     public void setBasketProducts(List<BasketProduct> basketProducts) {
         this.basketProducts = basketProducts;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public double getTotalBasketAmount() {
+        return totalBasketAmount;
+    }
+
+    public void setTotalBasketAmount(double totalBasketAmount) {
+        this.totalBasketAmount = totalBasketAmount;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

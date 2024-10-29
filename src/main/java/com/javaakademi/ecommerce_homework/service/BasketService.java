@@ -1,12 +1,11 @@
 package com.javaakademi.ecommerce_homework.service;
 
+import com.javaakademi.ecommerce_homework.dto.BasketDto;
+import com.javaakademi.ecommerce_homework.dto.UserDto;
 import com.javaakademi.ecommerce_homework.entity.Basket;
 import com.javaakademi.ecommerce_homework.entity.BasketProduct;
 import com.javaakademi.ecommerce_homework.entity.User;
-import com.javaakademi.ecommerce_homework.repository.BasketProductRepository;
 import com.javaakademi.ecommerce_homework.repository.BasketRepository;
-import com.javaakademi.ecommerce_homework.repository.UserRepository;
-import com.javaakademi.ecommerce_homework.response.BasketResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +15,7 @@ import java.util.List;
 @Service
 public class BasketService {
     @Autowired
-    private BasketRepository basketRepository;
+    private BasketRepository repository;
     @Autowired
     private BasketProductService basketProductService;
     @Autowired
@@ -27,18 +26,22 @@ public class BasketService {
     private final int BASKET_STATUS_DELIVERED = 2;
     private final int BASKET_STATUS_CANCELED = 3;
 
-    public BasketResponse addProductInBasket(int productID, int userID) {
+    public BasketDto saveBasket(int productID, int userID) {
         User user = userService.findById(userID);
-        Basket basket = basketRepository.findByUserAndStatus(user, BASKET_STATUS_NONE);
 
+        Basket basket = repository.findByUserAndStatus(user, BASKET_STATUS_NONE);
         if (basket == null) {
-            basket = createBasketForUser(user);
+            return basketNoneCreate(user, productID);
+        } else {
+            return basketExistUpdate(productID, basket);
         }
-
-        return basketExistAddNewProduct(productID, basket);
     }
 
-    private BasketResponse basketExistAddNewProduct(int productID, Basket basket) {
+
+    public List<BasketDto> findAll() {
+        return toList(repository.findAll());
+    }
+    private BasketDto basketExistUpdate(int productID, Basket basket) {
         BasketProduct basketProduct = basketProductService.createBasketProduct(productID, basket);
 
         if (isBasketProductInBasket(basketProduct, basket)) {
@@ -46,7 +49,8 @@ public class BasketService {
         } else {
             addProduct(basketProduct, basket); // Ürün sepette yoksa ürünü sepete ekle
         }
-        return toResponse(basketRepository.save(basket));
+        Basket basket1 = repository.save(basket);
+        return toDto(basket1);
     }
 
     private void addProduct(BasketProduct basketProduct, Basket basket) {
@@ -54,7 +58,7 @@ public class BasketService {
         basketProduct.setBasket(basket);
         basketProductsList.add(basketProduct);
         basket.setBasketProducts(basketProductsList);
-        basketRepository.save(basket);
+        repository.save(basket);
     }
 
     private boolean isBasketProductInBasket(BasketProduct basketProduct, Basket basket) {
@@ -66,52 +70,20 @@ public class BasketService {
         return false;
     }
 
-    public Basket createBasketForUser(User user) {
+    public BasketDto basketNoneCreate(User user, int productID) {
         return createAndAssignBasket(user);
     }
 
-    private Basket createAndAssignBasket(User user) {
+    private BasketDto createAndAssignBasket(User user) {
         Basket newBasket = new Basket();
         newBasket.setStatus(BASKET_STATUS_NONE);
         newBasket.setBasketProducts(new ArrayList<>());
         newBasket.setUser(user);
-        basketRepository.save(newBasket);
-        return newBasket;
+        newBasket = repository.save(newBasket);
+        return toDto(newBasket);
     }
-
-    private BasketResponse toResponse(Basket basket) {
-        BasketResponse basketResponse = new BasketResponse();
-        basketResponse.setStatus(basket.getStatus());
-        basketResponse.setUser(basket.getUser().getUsername());
-        basketResponse.setBasketProducts(basket.getBasketProducts());
-
-        List<BasketProduct> basketProducts = basket.getBasketProducts();
-        double totalCountForBasket = countBasketProductsInBasket(basketProducts); // Ürünleri sayma
-
-        basket.setTotalBasketCount(totalCountForBasket);
-
-        basketResponse.setTotalBasketAmount(countBasketAmountInBasket(basketProducts)); // Sepetteki tüm ürünlerin toplam fiyatı
-        return basketResponse;
-    }
-
-    private double countBasketProductsInBasket(List<BasketProduct> basketProducts) {
-        double totalCountForBasket = 0;
-        for (BasketProduct basketProduct : basketProducts) {
-            totalCountForBasket += basketProduct.getTotalBasketProductCount();
-        }
-        return totalCountForBasket;
-    }
-
-    private double countBasketAmountInBasket(List<BasketProduct> basketProducts) {
-        double totalAmountForBasket = 0;
-        for (BasketProduct basketProduct : basketProducts) {
-            totalAmountForBasket += basketProduct.getProduct().getPrice() * basketProduct.getTotalBasketProductCount();
-        }
-        return totalAmountForBasket;
-    }
-
     public void addAmountOfProductOneByOne(int productID, int basketID) {
-        Basket basket = basketRepository.findById(basketID).orElseThrow();
+        Basket basket = repository.findById(basketID).orElseThrow();
         List<BasketProduct> products = basket.getBasketProducts();
         double totalAmount = 0;
         for (BasketProduct product : products) {
@@ -122,16 +94,26 @@ public class BasketService {
             totalAmount = totalAmount + product.getBasketProductAmount();
 
         }
-        basket.setTotalBasketCount(totalAmount);
-        basketRepository.save(basket);
+        basket.setTotalBasketAmount(totalAmount);
+        repository.save(basket);
     }
 
-    public List<BasketResponse> findAll() {
-        List<Basket> baskets = basketRepository.findAll();
-        List<BasketResponse> basketResponses = new ArrayList<>();
-        for (Basket basket : baskets) {
-            basketResponses.add(toResponse(basket));
+
+    private List<BasketDto> toList(List<Basket> all) {
+        List<BasketDto> dtos = new ArrayList<>();
+        for (Basket basket : all) {
+            dtos.add(toDto(basket));
         }
-        return basketResponses;
+        return dtos;
+    }
+    private BasketDto toDto(Basket entity) {
+        return BasketDto.builder()
+                .id(entity.getId())
+                .totalBasketAmount(entity.getTotalBasketAmount())
+                .status(entity.getStatus())
+                .basketProducts(basketProductService.toDtoList(entity.getBasketProducts()))
+                .user(UserDto.builder().userId(entity.getUser().getId()).build())
+                .build();
+
     }
 }
