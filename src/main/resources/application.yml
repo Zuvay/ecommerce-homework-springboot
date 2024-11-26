@@ -5,7 +5,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/javaakademi?serverTimezone=UTC
     username: root
-    password: spring
+    password: Abdullahturkeri1
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -15,4 +15,4 @@ spring:
 
 
 server:
-  port: 8080
+  port: 9999
