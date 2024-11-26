@@ -2,7 +2,6 @@ package com.javaakademi.ecommerce_homework.domain.user.web;
 
 import com.javaakademi.ecommerce_homework.domain.user.api.UserDto;
 import com.javaakademi.ecommerce_homework.domain.user.api.UserService;
-import com.javaakademi.ecommerce_homework.domain.user.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,26 +13,26 @@ import java.util.stream.Collectors;
 @RequestMapping("/users")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserService service;
 
     @PostMapping
     public UserResponse createUser(@RequestBody UserRequest userRequest) {
-        return toResponse(userService.createUser(toDto(userRequest)));
+        return toResponse(service.createUser(toDto(userRequest)));
     }
 
     @DeleteMapping("/{userId}")
     public void deleteUser(@PathVariable int userId) {
-        userService.deleteUser(userId);
+        service.deleteUser(userId);
     }
 
     @GetMapping
     public List<UserResponse> getAllUsers() {
-        return toResponseList(userService.getAllUsers());
+        return toResponseList(service.getAllUsers());
     }
 
     @PutMapping("/{id}")
     public UserResponse updateUser(@RequestBody UserRequest request, @PathVariable int id) {
-        return toResponse(userService.updateUser(toDto(request), id));
+        return toResponse(service.updateUser(toDto(request), id));
     }
 
     public static UserResponse toResponse(UserDto dto) {

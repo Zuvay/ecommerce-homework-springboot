@@ -1,7 +1,7 @@
 package com.javaakademi.ecommerce_homework.domain.productcategory.web;
 
 import com.javaakademi.ecommerce_homework.domain.productcategory.api.ProductCategoryDto;
-import com.javaakademi.ecommerce_homework.domain.productcategory.impl.ProductCategoryServiceImpl;
+import com.javaakademi.ecommerce_homework.domain.productcategory.api.ProductCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,21 +12,21 @@ import java.util.stream.Collectors;
 @RequestMapping("/categories")
 public class ProductCategoryController {
     @Autowired
-    private ProductCategoryServiceImpl productCategoryService;
+    private ProductCategoryService service;
 
     @PostMapping("/{shopId}")
     private ProductCategoryResponse createProductCategory(@RequestBody ProductCategoryRequest productCategoryRequest, @PathVariable int shopId) {
-        return toResponse(productCategoryService.createProductCategory(toDto(productCategoryRequest), shopId));
+        return toResponse(service.createProductCategory(toDto(productCategoryRequest), shopId));
     }
 
     @DeleteMapping("/{id}")
     public void deleteProductCategory(@PathVariable int id) {
-        productCategoryService.deleteProductCategory(id);
+        service.deleteProductCategory(id);
     }
 
     @GetMapping
     public List<ProductCategoryResponse> getAllProductCategories() {
-        return toResponseList(productCategoryService.getAllProductCategories());
+        return toResponseList(service.getAllProductCategories());
     }
 
     public static ProductCategoryResponse toResponse(ProductCategoryDto dto) {

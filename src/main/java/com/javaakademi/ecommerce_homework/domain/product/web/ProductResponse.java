@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 public class ProductResponse extends BaseResponse {
     private String name;
     private double price;
-    private ProductCategoryDto categoryDto;
+    private int categoryId;
 }

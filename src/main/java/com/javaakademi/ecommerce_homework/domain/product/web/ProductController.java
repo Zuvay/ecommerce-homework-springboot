@@ -1,12 +1,7 @@
 package com.javaakademi.ecommerce_homework.domain.product.web;
 
 import com.javaakademi.ecommerce_homework.domain.product.api.ProductDto;
-import com.javaakademi.ecommerce_homework.domain.product.impl.Product;
-import com.javaakademi.ecommerce_homework.domain.product.impl.ProductServiceImpl;
-import com.javaakademi.ecommerce_homework.domain.productcategory.api.ProductCategoryDto;
-import com.javaakademi.ecommerce_homework.domain.productcategory.web.ProductCategoryController;
-import com.javaakademi.ecommerce_homework.domain.productcategory.web.ProductCategoryRequest;
-import com.javaakademi.ecommerce_homework.domain.productcategory.web.ProductCategoryResponse;
+import com.javaakademi.ecommerce_homework.domain.product.api.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,22 +12,22 @@ import java.util.stream.Collectors;
 @RequestMapping("/products")
 public class ProductController {
     @Autowired
-    private ProductServiceImpl productService;
+    private ProductService service;
 
     @PostMapping
     public ProductResponse createProduct(@RequestBody ProductRequest productRequest){
-        return toResponse(productService.createProduct(toDto(productRequest)));
+        return toResponse(service.createProduct(toDto(productRequest)));
     }
     @GetMapping
     public List<ProductResponse> gelAllProduct(){
-        return toResponseList(productService.getAll());
+        return toResponseList(service.getAll());
     }
 
     public static ProductResponse toResponse(ProductDto dto){
         return ProductResponse.builder()
                 .name(dto.getName())
                 .price(dto.getPrice())
-                .categoryDto(dto.getCategoryDto())
+                .categoryId(dto.getCategoryId())
                 .build();
     }
     public static ProductDto toDto(ProductRequest request) {

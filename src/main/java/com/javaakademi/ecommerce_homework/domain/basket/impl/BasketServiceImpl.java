@@ -50,6 +50,22 @@ public class BasketServiceImpl implements BasketService {
         return toDto(basket);
     }
 
+    @Override
+    public List<BasketProductDto> getProducts() {
+        return List.of();
+    }
+
+    @Override
+    public double getTotalAmount() {
+        return 0;
+    }
+
+    @Override
+    public int findBasketStatusByBasketId(){
+        return 0;
+    }
+
+
     private List<BasketProduct> updateBasket(Basket basket, BasketDto dto) {
         for (BasketProductDto basketProductDto : dto.getBasketProducts()) {
             boolean isUpdated = false;
