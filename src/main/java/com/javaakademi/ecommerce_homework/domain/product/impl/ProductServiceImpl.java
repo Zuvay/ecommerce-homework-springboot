@@ -1,5 +1,7 @@
 package com.javaakademi.ecommerce_homework.domain.product.impl;
 
+import com.hazelcast.core.HazelcastInstance;
+import com.javaakademi.ecommerce_homework.config.HazelcastConfig;
 import com.javaakademi.ecommerce_homework.domain.product.api.ProductService;
 import com.javaakademi.ecommerce_homework.domain.productcategory.impl.ProductCategory;
 import com.javaakademi.ecommerce_homework.domain.user.impl.UserServiceImpl;
@@ -9,7 +11,9 @@ import com.javaakademi.ecommerce_homework.domain.product.web.ProductResponse;
 import com.javaakademi.ecommerce_homework.domain.product.api.ProductDto;
 import com.javaakademi.ecommerce_homework.response.ErrorCodes;
 import com.javaakademi.ecommerce_homework.domain.productcategory.impl.ProductCategoryServiceImpl;
+import jakarta.persistence.Cacheable;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,16 +27,31 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private ProductCategoryServiceImpl productCategoryService;
+    @Autowired
+    private HazelcastConfig hazelcastConfig;
 
+    @Override
     public Product findById(int id) {
-        return productRepository.findById(id).orElseThrow();
-    }
+        // Önce cache bakıyoruz
+        Product cachedProduct = hazelcastConfig.get(String.valueOf(id));
+        if (cachedProduct != null) {
+            return cachedProduct;
+        }
 
+        // Cache de yoksa, veri tabanından getirip cachee ekliyoruz
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Product not found"));
+        hazelcastConfig.put(String.valueOf(id), product);
+        return product;
+    }
+    @Override
     public ProductDto createProduct(ProductDto dto) {
-//        Product product = toEntity(request);
-//        productRepository.save(product);
-//        return toResponse(product);
-        return null;
+        Product product = toEntity(dto);
+        productRepository.save(product);
+
+        //dbden sonra cache de ekliyoruz
+        hazelcastConfig.put(String.valueOf(product.getId()), product);
+        return toDto(product);
     }
 
     public List<ProductDto> getAll() {
