@@ -1,19 +1,10 @@
 package com.javaakademi.ecommerce_homework.domain.product.impl;
 
-import com.hazelcast.core.HazelcastInstance;
-import com.javaakademi.ecommerce_homework.config.HazelcastConfig;
+import com.javaakademi.ecommerce_homework.cacheconfig.HazelcastConfig;
 import com.javaakademi.ecommerce_homework.domain.product.api.ProductService;
-import com.javaakademi.ecommerce_homework.domain.productcategory.impl.ProductCategory;
-import com.javaakademi.ecommerce_homework.domain.user.impl.UserServiceImpl;
-import com.javaakademi.ecommerce_homework.exception.TrendyolException;
-import com.javaakademi.ecommerce_homework.domain.product.web.ProductRequest;
-import com.javaakademi.ecommerce_homework.domain.product.web.ProductResponse;
 import com.javaakademi.ecommerce_homework.domain.product.api.ProductDto;
-import com.javaakademi.ecommerce_homework.response.ErrorCodes;
 import com.javaakademi.ecommerce_homework.domain.productcategory.impl.ProductCategoryServiceImpl;
-import jakarta.persistence.Cacheable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

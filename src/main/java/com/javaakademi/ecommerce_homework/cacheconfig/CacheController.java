@@ -1,4 +1,4 @@
-package com.javaakademi.ecommerce_homework.config;
+package com.javaakademi.ecommerce_homework.cacheconfig;
 
 import com.javaakademi.ecommerce_homework.domain.product.impl.Product;
 import org.springframework.http.HttpStatus;

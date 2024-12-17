@@ -1,4 +1,4 @@
-package com.javaakademi.ecommerce_homework.config;
+package com.javaakademi.ecommerce_homework.cacheconfig;
 
 
 import com.hazelcast.config.Config;
